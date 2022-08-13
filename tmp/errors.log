@@ -1,0 +1,108 @@
+[2022-07-04 16:24:16] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-07-04 16:25:00] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-07-04 16:30:26] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-07-04 16:31:22] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-07-04 16:33:03] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-07-04 16:33:14] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-07-04 16:34:05] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-07-21 19:29:53] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-07-28 18:01:08] Текст ошибки: Argument 1 passed to app\models\Partner::getPartnerByID() must be of the type string, null given, called in F:\WebServer\domains\workplace.loc\app\controllers\MainController.php on line 17 | Файл: F:\WebServer\domains\workplace.loc\app\models\Partner.php | Строка: 90
+--------------------
+[2022-07-28 18:01:08] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-07-28 18:03:28] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-07-30 17:07:23] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-07-31 15:44:51] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-07-31 15:46:26] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-07-31 15:46:37] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-07-31 15:50:29] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-07-31 16:13:07] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-07-31 16:21:44] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-07-31 16:44:09] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-07 12:29:06] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-07 15:10:08] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-07 17:04:02] Текст ошибки: Файл вида F:\WebServer\domains\workplace.loc/app/views/Budget/file-upload.php не найден | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\base\View.php | Строка: 76
+--------------------
+[2022-08-07 17:04:03] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-07 17:07:21] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-07 17:07:28] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-07 17:14:40] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-07 17:14:58] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-07 17:16:18] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-07 17:17:27] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-07 17:17:47] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-07 17:19:22] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-07 17:21:31] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-07 17:54:19] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-07 17:57:16] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-07 19:33:15] Текст ошибки: Контроллер app\controllers\TargetController не найден | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 46
+--------------------
+[2022-08-07 19:33:38] Текст ошибки: Контроллер app\controllers\TargetController не найден | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 46
+--------------------
+[2022-08-07 19:33:52] Текст ошибки: Контроллер app\controllers\TargetController не найден | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 46
+--------------------
+[2022-08-13 10:53:53] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-13 10:56:46] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-13 11:36:42] Текст ошибки: Контроллер app\controllers\UploadFileController не найден | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 46
+--------------------
+[2022-08-13 11:40:08] Текст ошибки: Контроллер app\controllers\UploadFileController не найден | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 46
+--------------------
+[2022-08-13 11:49:29] Текст ошибки: Контроллер app\controllers\UploadFileController не найден | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 46
+--------------------
+[2022-08-13 11:54:09] Текст ошибки: Контроллер app\controllers\UploadFileController не найден | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 46
+--------------------
+[2022-08-13 11:58:24] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-13 12:01:36] Текст ошибки: Метод app\controllers\BudgetController::uploadFileAction не найден | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 42
+--------------------
+[2022-08-13 12:04:46] Текст ошибки: Файл вида F:\WebServer\domains\workplace.loc/app/views/Budget/upload-file.php не найден | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\base\View.php | Строка: 76
+--------------------
+[2022-08-13 14:02:56] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-13 14:03:46] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-13 14:03:48] Текст ошибки: Файл вида F:\WebServer\domains\workplace.loc/app/views/Budget/upload-file.php не найден | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\base\View.php | Строка: 76
+--------------------
+[2022-08-13 14:04:57] Текст ошибки: Файл вида F:\WebServer\domains\workplace.loc/app/views/Budget/upload-file.php не найден | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\base\View.php | Строка: 76
+--------------------
+[2022-08-13 14:06:04] Текст ошибки: Файл вида F:\WebServer\domains\workplace.loc/app/views/Budget/upload-file.php не найден | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\base\View.php | Строка: 76
+--------------------
+[2022-08-13 14:10:57] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-13 14:11:20] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-13 15:07:16] Текст ошибки: Страница не найдена | Файл: F:\WebServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------

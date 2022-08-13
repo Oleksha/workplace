@@ -1,0 +1,612 @@
+/* Общие стили */
+
+body {
+    min-width: 1200px;
+    font-size: 18px;
+    line-height: 30px;
+    font-family: "Montserrat", Arial, sans-serif;
+    font-weight: normal;
+    color: #533738;
+    background-color: #e5e5e5;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+a {
+    color: #533738;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #cc8b86;
+}
+
+a:focus {
+    color: #99544f;
+}
+
+.visually-hidden:not(:focus):not(:active) {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    margin: -1px;
+    padding: 0;
+    width: 1px;
+    height: 1px;
+    border: 0;
+    white-space: nowrap;
+    clip-path: inset(100%);
+}
+
+.container {
+    margin: 0 auto;
+    width: 1036px;
+}
+
+.wide-container {
+    margin: 0 auto;
+    width: 1200px;
+}
+
+.button {
+    display: inline-block;
+    vertical-align: middle;
+    box-sizing: border-box;
+    padding: 26px 69px;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    border: 2px solid #cc8b86;
+    background-color: #cc8b86;
+}
+
+.button:hover {
+    color: #cc8b86;
+    border-color: white;
+    background-color: white;
+}
+
+.button:focus {
+    color: #99544f;
+    border: 2px solid #99544f;
+    background-color: white;
+}
+
+.section-heading {
+    margin-top: 0;
+    margin-bottom: 40px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 50px;
+}
+
+/* Стили для шапки */
+
+.page-header {
+    margin-bottom: -110px;
+}
+
+.page-header .wide-container {
+    display: flex;
+    align-items: baseline;
+    padding-top: 36px;
+    padding-bottom: 46px;
+}
+
+.logo {
+    display: flex;
+    align-items: flex-end;
+    align-self: normal;
+    margin-right: 83px;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    margin-right: 42px;
+    padding: 0;
+    list-style: none;
+}
+
+.nav-item {
+    margin-right: 23px;
+}
+
+.nav-item:last-child {
+    margin-right: 0;
+}
+
+.nav-link {
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.phone {
+    font-size: 16px;
+    line-height: 20px;
+}
+
+/* Стили для промо блока */
+
+.promo {
+    padding-top: 150px;
+    padding-bottom: 166px;
+    background-color: #ded7cb;
+    background-image: url("../img/promo.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.promo-text {
+    width: 46%;
+}
+
+.main-heading {
+    margin-top: 0;
+    margin-bottom: 21px;
+    font-weight: 400;
+    font-size: 50px;
+    line-height: 62px;
+}
+
+.promo-description {
+    margin-top: 0;
+    margin-bottom: 21px;
+}
+
+/* Стили для блока "О нас" */
+
+.about {
+    padding-top: 65px;
+    padding-bottom: 20px;
+}
+
+.half-wrap {
+    display: flex;
+}
+
+.about-img {
+    align-self: flex-start;
+    margin-right: 64px;
+}
+
+.text-wrap {
+    width: 50%;
+}
+
+.text-wrap p {
+    margin-top: 0;
+    margin-bottom: 29px;
+}
+
+/* Стили для преимуществ */
+
+.advantages {
+    padding-top: 85px;
+    padding-bottom: 80px;
+    color: white;
+    background-color: #8d7370;
+}
+
+.advantages-list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.advantages-item {
+    text-align: center;
+}
+
+.advantages-item span {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: 400;
+    font-size: 50px;
+    line-height: 62px;
+}
+
+.advantages-item p {
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 37px;
+}
+
+/* Стили для работ */
+
+.works {
+    padding-top: 65px;
+    padding-bottom: 65px;
+}
+
+.works .section-heading {
+    text-align: left;
+}
+
+.works-grid {
+    display: grid;
+    grid-template-columns: 5fr 2fr 5fr;
+    grid-column-gap: 20px;
+    grid-row-gap: 30px;
+}
+
+.works-item {
+    position: relative;
+}
+
+.works-item:nth-child(4n + 2) {
+    grid-column: 2 / -1;
+}
+
+.works-item:nth-child(4n + 3) {
+    grid-column: 1 / 3;
+}
+
+.works-item:nth-child(4n + 4) {
+    grid-column: 3 / -1;
+}
+
+.works-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.works-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    box-sizing: border-box;
+    padding-top: 86px;
+    padding-right: 35px;
+    padding-left: 35px;
+    width: 100%;
+    height: 100%;
+    color: white;
+    background-color: rgba(100, 72, 69, 0.8);
+}
+
+.works-item:hover .works-hover {
+    z-index: 2;
+}
+
+.works-heading {
+    margin: 0 auto;
+    margin-top: 0;
+    margin-bottom: 15px;
+    max-width: 270px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 37px;
+}
+
+.works-text {
+    display: -webkit-box;
+    overflow-y: hidden;
+
+    -webkit-line-clamp: 8;
+    -webkit-box-orient: vertical;
+}
+
+.more {
+    display: block;
+    margin-top: 37px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 37px;
+}
+
+.more svg {
+    margin-left: 10px;
+}
+
+.more:hover path {
+    fill: #cc8b86;
+}
+
+.more:focus path {
+    fill: #99544f;
+}
+
+/* Стили для команды */
+
+.team {
+    padding-top: 50px;
+    padding-bottom: 60px;
+    background-color: #e2c4ba;
+}
+
+.team-list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 0;
+    margin-bottom: 18px;
+    padding: 0;
+    list-style: none;
+}
+
+.team-item {
+    margin-bottom: 20px;
+    width: 31%;
+}
+
+.team-img {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.team-text {
+    margin: 0;
+}
+
+.process-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    margin-top: 40px;
+    padding: 0;
+    list-style: none;
+    /*    counter-reset: section;*/
+}
+
+.process-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    width: 25%;
+}
+
+.process-item span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: #8d7370;
+    color: white;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 30px;
+}
+
+/*
+
+Более правильный вариант с использованием счётчика и псевдоэлемента:
+https://developer.mozilla.org/ru/docs/Web/CSS/CSS_Lists_and_Counters/Using_CSS_counters
+
+.process-item::before {
+    counter-increment: section;
+    content: counter(section);
+    width: 70px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    margin-bottom: 20px;
+
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 30px;
+    color: white;
+
+    background-color: #8D7370;
+    border-radius: 50%;
+}
+*/
+
+.process-item p {
+    margin: 0;
+    text-align: center;
+}
+
+/* Стили для отзывов */
+
+.reviews {
+    padding-top: 65px;
+    padding-bottom: 65px;
+}
+
+.reviews-slider {
+    position: relative;
+    padding-right: 100px;
+    padding-left: 100px;
+}
+
+.reviews-pagination {
+    position: absolute;
+    top: 48%;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    transform: translateY(-50%);
+}
+
+.reviews-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    width: 68px;
+    height: 68px;
+    border: 2px solid #cc8b86;
+    border: none;
+    border-radius: 50%;
+    background-color: #cc8b86;
+}
+
+.reviews-button:hover {
+    background-color: white;
+}
+
+.reviews-button:hover path,
+.reviews-button:focus path {
+    fill: #cc8b86;
+}
+
+.reviews-button:focus {
+    border: 2px solid #cc8b86;
+    background-color: white;
+}
+
+.reviews-button-prev svg {
+    transform: rotate(180deg);
+}
+
+.reviews-slide {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 20px;
+}
+
+.reviews-slide {
+    display: none;
+}
+
+.reviews-slide:first-child {
+    display: grid;
+}
+
+.reviews-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.reviews-text p {
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+
+.reviews-text p:last-child {
+    margin-bottom: 0;
+}
+
+.reviews-author {
+    margin-bottom: 0;
+    text-transform: uppercase;
+}
+
+.reviews-images img {
+    display: block;
+    margin-bottom: 24px;
+}
+
+.reviews-images img:last-child {
+    margin-bottom: 0;
+}
+
+/* Стили для формы */
+
+.form {
+    background-color: #8d7370;
+    color: white;
+}
+
+.form .wide-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.form-wrap {
+    padding-top: 50px;
+    padding-right: 20px;
+    padding-bottom: 50px;
+    padding-left: 82px;
+}
+
+.form-wrap .section-heading {
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.form-text {
+    margin-bottom: 34px;
+}
+
+.form-action p {
+    position: relative;
+    margin: 0;
+    margin-bottom: 24px;
+}
+
+.text-input {
+    display: block;
+    padding-top: 10px;
+    padding-bottom: 13px;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid white;
+    background-color: transparent;
+    color: white;
+}
+
+.text-input:focus + .input-label,
+.text-input:valid:not(:placeholder-shown) + .input-label {
+    bottom: 40px;
+    transition: 0.2s ease-in;
+}
+
+.input-label {
+    position: absolute;
+    bottom: 11px;
+    left: 0;
+    transition: 0.2s ease-in;
+}
+
+.submit-button {
+    margin-top: 7px;
+}
+
+.map {
+    width: auto;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Стили для подвала */
+
+.page-footer .wide-container {
+    display: flex;
+    align-items: center;
+    padding-top: 37px;
+    padding-bottom: 37px;
+}
+
+.page-footer .phone {
+    font-size: 18px;
+    line-height: 30px;
+}
+
+.adress {
+    margin-top: 0;
+    margin-right: auto;
+    margin-bottom: 0;
+    margin-left: 42px;
+}
+
+.copyright {
+    margin: 0;
+}

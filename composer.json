@@ -1,0 +1,16 @@
+{
+  "autoload": {
+    "psr-4": {
+      "workplace\\": "vendor/workplace/core",
+      "app\\": "app"
+    }
+  },
+  "require": {
+    "gabordemooij/redbean": "dev-master",
+    "ext-json": "*",
+    "ext-mbstring": "*",
+    "vlucas/valitron": "^1.4",
+    "enyo/dropzone": "^5.9",
+    "phpoffice/phpspreadsheet": "^1.24"
+  }
+}

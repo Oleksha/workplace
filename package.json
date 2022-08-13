@@ -1,0 +1,7 @@
+{
+  "name": "workplace.loc",
+  "version": "1.0.0",
+  "dependencies": {
+    "dropzone": "^6.0.0-beta.2"
+  }
+}
