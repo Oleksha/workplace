@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Budget;
 use app\models\Partner;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class BudgetController extends AppController {
 
@@ -159,6 +160,8 @@ class BudgetController extends AppController {
     }
 
     public function uploadAction() {
+        unset($_SESSION['success']);
+        unset($_SESSION['error']);
         //$this->updateTable();die;
 
         /*if ($_FILES) {
@@ -173,7 +176,40 @@ class BudgetController extends AppController {
             }
         }*/
         if (isset($_SESSION['file'])) {
-            $_SESSION['success'] = 'Все прошло хорошо';
+            $reader = IOFactory::createReader('Xlsx');
+            $spreadsheet = $reader->load(WWW . "/uploads/{$_SESSION['file']}");
+            // Только чтение данных
+            $reader->setReadDataOnly(true);
+            // Количество листов
+            $sheetsCount = $spreadsheet->getSheetCount();
+            $worksheet = $spreadsheet->getSheetByName('ЯНВАРЬ');
+
+            echo '<table>' . PHP_EOL;
+            foreach ($worksheet->getRowIterator() as $row) {
+                echo '<tr>' . PHP_EOL;
+                $cellIterator = $row->getCellIterator();
+                $cellIterator->setIterateOnlyExistingCells(TRUE); // This loops through all cells,
+                //    even if a cell value is not set.
+                // For 'TRUE', we loop through cells
+                //    only when their value is set.
+                // If this method is not called,
+                //    the default value is 'false'.
+                foreach ($cellIterator as $cell) {
+                    echo '<td>' .
+                        $cell->getValue() .
+                        '</td>' . PHP_EOL;
+                }
+                echo '</tr>' . PHP_EOL;
+            }
+            echo '</table>' . PHP_EOL;
+
+            /*$data = $sheet->toArray();
+            foreach ($data as $item):
+                debug($item);
+            endforeach;*/
+
+            $_SESSION['success'] = "Все прошло хорошо. В книге {$sheetsCount} листов";
+            unlink(WWW . "/uploads/{$_SESSION['file']}"); // удаляем файл
             $_SESSION['error'] = 'Все очень плохо';
             unset($_SESSION['file']);
         }
