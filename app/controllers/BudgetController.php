@@ -162,6 +162,7 @@ class BudgetController extends AppController {
     public function uploadAction() {
         unset($_SESSION['success']);
         unset($_SESSION['error']);
+        //unset($_SESSION['file']);
         //$this->updateTable();die;
 
         /*if ($_FILES) {
@@ -182,11 +183,14 @@ class BudgetController extends AppController {
             $reader->setReadDataOnly(true);
             // Количество листов
             $sheetsCount = $spreadsheet->getSheetCount();
-            $worksheet = $spreadsheet->getSheetByName('ЯНВАРЬ');
-
-            echo '<table>' . PHP_EOL;
+            $worksheet = $spreadsheet->getActiveSheet();//getSheetByName('ЯНВАРЬ');
+            unlink(WWW . "/uploads/{$_SESSION['file']}"); // удаляем файл            
+            unset($_SESSION['file']);
+            //echo '<table>' . PHP_EOL;
+            $header = true; $header_array = []; $row_array = []; $budget_array = [];
             foreach ($worksheet->getRowIterator() as $row) {
-                echo '<tr>' . PHP_EOL;
+                //echo '<tr>' . PHP_EOL;
+                $i = 0;
                 $cellIterator = $row->getCellIterator();
                 $cellIterator->setIterateOnlyExistingCells(TRUE); // This loops through all cells,
                 //    even if a cell value is not set.
@@ -195,22 +199,56 @@ class BudgetController extends AppController {
                 // If this method is not called,
                 //    the default value is 'false'.
                 foreach ($cellIterator as $cell) {
-                    echo '<td>' .
-                        $cell->getValue() .
-                        '</td>' . PHP_EOL;
+                    //echo '<td>' . $cell->getValue() . '</td>' . PHP_EOL;
+                    if ($header)  { 
+                        $header_array[] = $cell->getValue(); // получаем наименования столбцов в массив
+                    } else {
+                        $row_array[$header_array[$i]] = $cell->getValue();
+                        $i = $i + 1;
+                    }
                 }
-                echo '</tr>' . PHP_EOL;
+                if (!$header) $budget_array[] = $row_array;
+                $header = false;
             }
-            echo '</table>' . PHP_EOL;
+            //echo '</table>' . PHP_EOL;
 
-            /*$data = $sheet->toArray();
-            foreach ($data as $item):
-                debug($item);
-            endforeach;*/
+            //debug($budget_array); // содержит все данные по БО из файла
+            //debug($spreadsheet->getActiveSheet()->getTitle()); // содержит имя листа для того чтобы укавзать Сценарий в формате YYYY-MM-01
+            /* начало преобразование данных */
+            $budget_obj = new Budget();
+            
+            foreach ($budget_array as $item) {
+                if ($item['Статус документа'] != 'Не согласован') {
+                    $bo['scenario'] = $spreadsheet->getActiveSheet()->getTitle();
+                    $bo['month_exp'] = $this->dateChange($item['Месяц расходов']);
+                    $bo['month_pay'] = $this->dateChange($item['Месяц оплаты']);
+                    $bo['number'] = $item['Номер'];
+                    $bo['summa'] = $item['Сумма'];
+                    if ($item['Ставка НДС'] == 'Без НДС') {
+                        $bo['vat'] = '1.00';
+                    } elseif ($item['Ставка НДС'] == '20%') {
+                        $bo['vat'] = '1.20';
+                    } else {
+                        $bo['vat'] = '1.10';
+                    }                
+                    $bo_item = R::getAssocRow("SELECT * FROM budget_items WHERE name_budget_item = ?", [$item['Статья бюджета']]);                    
+                    if ($bo_item) {
+                        $bo_item = $bo_item[0];
+                        $bo['budget_item_id'] = $bo_item['id'];
+                    } else {
+                        $_SESSION['error'] = "Все очень плохо. В БД отсутствует запись - {$item['Статья бюджета']}.";
+                    }
+                    
+                    $bo['status'] = $item['Статус документа'];
 
+                    $budget_obj->load($bo);
+                    //debug($budget_obj->attributes);
+                    $budget_obj->save('budgets');
+                }                
+            }
+            /* конец преобразование данных */
             $_SESSION['success'] = "Все прошло хорошо. В книге {$sheetsCount} листов";
-            unlink(WWW . "/uploads/{$_SESSION['file']}"); // удаляем файл
-            unset($_SESSION['file']);
+            //debug($budget_array);
         } else {
             $_SESSION['error'] = 'Все очень плохо. Ошибка загрузки файла.';
         }
@@ -223,6 +261,12 @@ class BudgetController extends AppController {
         //$this->set(compact('receipt'));
     }
 
+    public function dateChange($date_str) {
+        $year = substr($date_str, 6, 4);
+        $month = substr($date_str, 3, 2);
+        $day = substr($date_str, 0, 2);
+        return $year . '-' . $month . '-' . $day;
+    }
     public function uploadFileAction() {
         if (!empty($_FILES)) {
             if (isset($_FILES['file'])) {
