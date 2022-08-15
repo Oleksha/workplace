@@ -216,7 +216,8 @@ class BudgetController extends AppController {
             //debug($spreadsheet->getActiveSheet()->getTitle()); // содержит имя листа для того чтобы укавзать Сценарий в формате YYYY-MM-01
             /* начало преобразование данных */
             $budget_obj = new Budget();
-            
+            $budget_success = []; $success = true;
+            $_SESSION['error'] = "";
             foreach ($budget_array as $item) {
                 if ($item['Статус документа'] != 'Не согласован') {
                     $bo['scenario'] = $spreadsheet->getActiveSheet()->getTitle();
@@ -236,22 +237,30 @@ class BudgetController extends AppController {
                         $bo_item = $bo_item[0];
                         $bo['budget_item_id'] = $bo_item['id'];
                     } else {
-                        $_SESSION['error'] = "Все очень плохо. В БД отсутствует запись - {$item['Статья бюджета']}.";
+                        $success = false;
+                        $_SESSION['error'] .= "Все очень плохо. В БД отсутствует запись - {$item['Статья бюджета']}. ";
                     }
                     
                     $bo['status'] = $item['Статус документа'];
-
-                    $budget_obj->load($bo);
-                    //debug($budget_obj->attributes);
-                    $budget_obj->save('budgets');
+                    $budget_success[] = $bo;
+                    
                 }                
             }
-            /* конец преобразование данных */
-            $_SESSION['success'] = "Все прошло хорошо. В книге {$sheetsCount} листов";
-            //debug($budget_array);
-        } else {
-            $_SESSION['error'] = 'Все очень плохо. Ошибка загрузки файла.';
-        }
+            $i = 0; 
+            if ($success) {
+                foreach ($budget_success as $item) {
+                    $budget_obj->load($item);
+                    //debug($budget_obj->attributes);
+                    $budget_obj->save('budget');
+                    $i = $i + 1;
+                    unset($_SESSION['error']);
+                    $_SESSION['success'] = "Все прошло хорошо. Добавлено {$i} бюджетных операций";
+                } 
+            } else {
+                $_SESSION['error'] .= 'Все очень плохо. Ошибка загрузки файла. ';
+            }           
+            
+        } 
 
 
         //$file = !empty($_POST['file']) ? $_POST['file'] : null;
