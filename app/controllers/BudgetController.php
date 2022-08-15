@@ -210,8 +210,9 @@ class BudgetController extends AppController {
 
             $_SESSION['success'] = "Все прошло хорошо. В книге {$sheetsCount} листов";
             unlink(WWW . "/uploads/{$_SESSION['file']}"); // удаляем файл
-            $_SESSION['error'] = 'Все очень плохо';
             unset($_SESSION['file']);
+        } else {
+            $_SESSION['error'] = 'Все очень плохо. Ошибка загрузки файла.';
         }
 
 
