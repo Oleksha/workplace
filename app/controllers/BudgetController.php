@@ -160,67 +160,50 @@ class BudgetController extends AppController {
     }
 
     public function uploadAction() {
-        unset($_SESSION['success']);
-        unset($_SESSION['error']);
-        //unset($_SESSION['file']);
+        unset($_SESSION['success']); // удаляем сессию с успешными сообщениями
+        unset($_SESSION['error']);   // удаляем сессию с ошибочными сообщениями
+        
         //$this->updateTable();die;
 
-        /*if ($_FILES) {
-            //debug($_FILES);
-            $path = WWW . '/uploads/' . $_FILES['file']['name'];
-            //debug($path);die;
-            if (!move_uploaded_file($_FILES['file']['tmp_name'], $path)) {
-                $_SESSION['error'] = 'Ошибка при загрузке файла с данными';
-                //header('Location: ../signup.php');
-            } else {
-                $_SESSION['success'] = 'Вс прошло отлично';
-            }
-        }*/
         if (isset($_SESSION['file'])) {
             $reader = IOFactory::createReader('Xlsx');
             $spreadsheet = $reader->load(WWW . "/uploads/{$_SESSION['file']}");
-            // Только чтение данных
-            $reader->setReadDataOnly(true);
-            // Количество листов
-            $sheetsCount = $spreadsheet->getSheetCount();
-            $worksheet = $spreadsheet->getActiveSheet();//getSheetByName('ЯНВАРЬ');
-            unlink(WWW . "/uploads/{$_SESSION['file']}"); // удаляем файл            
-            unset($_SESSION['file']);
-            //echo '<table>' . PHP_EOL;
-            $header = true; $header_array = []; $row_array = []; $budget_array = [];
+            $reader->setReadDataOnly(true);                 // Устанавливаем только чтение данных
+            $worksheet = $spreadsheet->getActiveSheet();    // считываем данные из активного листа
+            unlink(WWW . "/uploads/{$_SESSION['file']}");   // удаляем файл. После доработки перенести удаление в конец            
+            unset($_SESSION['file']);                       // удаляем сессию с именем обрабатываемого файла
+            $header = true;     // ключ что это строка заголовков
+            $header_array = []; // массив содержащий заголовки столбцов
+            $row_array = [];    // массив со значениями текущей строки
+            $budget_array = []; // массив со значениями текущей строки
+            /* упорядочиваем полученные данные - начало */
             foreach ($worksheet->getRowIterator() as $row) {
-                //echo '<tr>' . PHP_EOL;
+                // обрабатываем очередную строку из файла
                 $i = 0;
                 $cellIterator = $row->getCellIterator();
-                $cellIterator->setIterateOnlyExistingCells(TRUE); // This loops through all cells,
-                //    even if a cell value is not set.
-                // For 'TRUE', we loop through cells
-                //    only when their value is set.
-                // If this method is not called,
-                //    the default value is 'false'.
+                $cellIterator->setIterateOnlyExistingCells(TRUE); // просматривать только заполненные ячейки
                 foreach ($cellIterator as $cell) {
-                    //echo '<td>' . $cell->getValue() . '</td>' . PHP_EOL;
-                    if ($header)  { 
+                    if ($header)  { // если это заголовок заполняем массив 
                         $header_array[] = $cell->getValue(); // получаем наименования столбцов в массив
-                    } else {
+                    } else {        // если это строка с данными
                         $row_array[$header_array[$i]] = $cell->getValue();
                         $i = $i + 1;
                     }
                 }
-                if (!$header) $budget_array[] = $row_array;
+                if (!$header) $budget_array[] = $row_array; // если это не заголовок добавляем в массив данных
                 $header = false;
             }
-            //echo '</table>' . PHP_EOL;
-
-            //debug($budget_array); // содержит все данные по БО из файла
-            //debug($spreadsheet->getActiveSheet()->getTitle()); // содержит имя листа для того чтобы укавзать Сценарий в формате YYYY-MM-01
-            /* начало преобразование данных */
-            $budget_obj = new Budget();
+            /***  упорядочиваем полученные данные - конец  ***/
+            /* массив $budget_array содержит данные из файла */
+            /* преобразование данных для добавление в БД - начало */
+            $budget_obj = new Budget(); // экземпляр модели Budget
             $budget_success = []; $success = true;
             $_SESSION['error'] = "";
+            $i = 2;
             foreach ($budget_array as $item) {
-                if ($item['Статус документа'] != 'Не согласован') {
-                    $bo['scenario'] = $spreadsheet->getActiveSheet()->getTitle();
+                // Обрабатываем только строки со статусом СОГЛАСОВАН и НА СОГЛАСОВАНИИ
+                if ($item['Статус документа'] != 'Не согласован' && $item['Статус документа'] != 'Формирование') {
+                    $bo['scenario'] = $spreadsheet->getActiveSheet()->getTitle();  // сценарий берем из имени листа
                     $bo['month_exp'] = $this->dateChange($item['Месяц расходов']);
                     $bo['month_pay'] = $this->dateChange($item['Месяц оплаты']);
                     $bo['number'] = $item['Номер'];
@@ -238,44 +221,61 @@ class BudgetController extends AppController {
                         $bo['budget_item_id'] = $bo_item['id'];
                     } else {
                         $success = false;
-                        $_SESSION['error'] .= "Все очень плохо. В БД отсутствует запись - {$item['Статья бюджета']}. ";
-                    }
-                    
+                        $_SESSION['error'] .= "Все очень плохо. В БД отсутствует запись - {$item['Статья бюджета']}. Строка - {$i} ";
+                        $this->setMeta('Загрузка новых БО', '', '');
+                        return;
+                    }                    
                     $bo['status'] = $item['Статус документа'];
-                    $budget_success[] = $bo;
-                    
-                }                
+                    $budget_success[] = $bo;                    
+                } 
+                $i += 1;
             }
-            $i = 0; 
+            $i = 0; $y = 0; 
             if ($success) {
+                $_SESSION['success'] = "Все прошло хорошо. ";
                 foreach ($budget_success as $item) {
                     $budget_obj->load($item);
-                    //debug($budget_obj->attributes);
-                    $budget_obj->save('budget');
-                    $i = $i + 1;
+                    // проверка на наличии БО с этим номером в БД
+                    if (!$this->checkBO($item)) {
+                        // БО нет в БД
+                        $budget_obj->save('budget');
+                        $i = $i + 1;
+                    } else {
+                        $id = $this->checkBO($item);
+                        $budget_obj->edit('budget', $id);
+                        $y = $y + 1;
+                    }
                     unset($_SESSION['error']);
-                    $_SESSION['success'] = "Все прошло хорошо. Добавлено {$i} бюджетных операций";
                 } 
+                if ($i > 0) $_SESSION['success'] .= "Добавлено {$i} бюджетных операций. ";
+                if ($y > 0) $_SESSION['success'] .= "Исправлено {$y} бюджетных операций. ";
             } else {
                 $_SESSION['error'] .= 'Все очень плохо. Ошибка загрузки файла. ';
             }           
             
         } 
-
-
-        //$file = !empty($_POST['file']) ? $_POST['file'] : null;
+        
         // формируем метатеги для страницы
         $this->setMeta('Загрузка новых БО', '', '');
-        // Передаем полученные данные в вид
-        //$this->set(compact('receipt'));
     }
 
+    public function checkBO($data) {
+        $bo_item = R::getAssocRow("SELECT * FROM budget WHERE scenario = ? AND number = ?", [$data['scenario'], $data['number']]);
+        if ($bo_item) {
+            $bo_item = $bo_item[0];
+            return $bo_item['id'];
+        } else {
+            return false;
+        }
+    }
+    
     public function dateChange($date_str) {
         $year = substr($date_str, 6, 4);
         $month = substr($date_str, 3, 2);
         $day = substr($date_str, 0, 2);
         return $year . '-' . $month . '-' . $day;
     }
+    
     public function uploadFileAction() {
         if (!empty($_FILES)) {
             if (isset($_FILES['file'])) {
