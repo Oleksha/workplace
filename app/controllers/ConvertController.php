@@ -6,34 +6,40 @@ class ConvertController extends AppController {
 
     public function indexAction() {
         
-        //$this->updateTable();die;
-        
+        $this->updateTable();die;
+
         // формируем метатеги для страницы
         $this->setMeta('Подготовка данных');
 
     }
-    
+
     public function updateTable() {
-        $payments = \R::getAssocRow("SELECT * FROM payment");
+        $payments = \R::getAssocRow("SELECT * FROM payment"); // получаем все оплаты из базы
         foreach ($payments as $payment) {
+            /****** добавляем идентификаторы приходов ******/
             $receipts_id = '';
             $receipts = explode(';', $payment['receipt']);         
             foreach ($receipts as $receipt) {
-                //debug($receipt);
+                if ($this->getReceipt($receipt) == false) { echo 'отсутсвует поступление '.$receipt; return; }
                 $receipts_id .= $this->getReceipt($receipt) . ';';
             }
-            $receipts_id = rtrim($receipts_id, ';');
+            $receipts_id = rtrim($receipts_id, ';');            
             $payment['receipts_id'] = $receipts_id;
+            /****** добавляем идентификаторы приходов ******/
+
+            /****** добавляем идентификаторы ЕР ******/
             $ers_id = '';
             $ers = explode(';', $payment['num_er']); 
             foreach ($ers as $er) {
-                //debug($receipt);
+                if ($this->getER($er, $payment['id_partner']) == false) { echo 'отсутсвует ЕР '.$er. ' в оплате '.$payment['id_partner']; return; }
                 $ers_id .= $this->getER($er, $payment['id_partner']) . ';';
             }
             $ers_id = rtrim($ers_id, ';');
             $payment['num_er_id'] = $ers_id;
-            debug($payment);
-        }        
+            /****** добавляем идентификаторы ЕР ******/
+            //debug($payment);
+        }     
+        debug($payments);   
     }
 
     public function getReceipt($numbers) {
