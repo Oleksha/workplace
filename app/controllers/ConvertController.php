@@ -9,7 +9,7 @@ class ConvertController extends AppController {
         //$this->updateTable();die;
         
         // формируем метатеги для страницы
-        $this->setMeta('Регистрация нового пользователя');
+        $this->setMeta('Подготовка данных');
 
     }
     
