@@ -34,6 +34,7 @@ if (!isset($_SESSION['user'])) {
                     <li><a href="/" class="nav-link px-2 text-white">Главная</a></li>
                     <li><a href="/partner" class="nav-link px-2 text-white">Контрагенты</a></li>
                     <li><a href="/budget" class="nav-link px-2 text-white">Бюджет</a></li>
+                    <li><a href="/convert" class="nav-link px-2 text-white">Конвертирование</a></li>
                 </ul>
                 <?php if (isset($_SESSION['user'])): ?>
                 <?php if ($_SESSION['user']['avatar'] == '') {
