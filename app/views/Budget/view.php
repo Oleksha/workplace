@@ -41,11 +41,11 @@
             <div class="col-2">
                 <div class="text-center">
                     <small class="text-muted">месяц расхода</small>
-                    <p><?= $month_exp;?></p>
+                    <p><strong><?= $month_exp;?></strong></p>
                 </div>
                 <div class="text-center">
                     <small class="text-muted">месяц оплаты</small>
-                    <p><?= $month_pay;?></p>
+                    <p><strong><?= $month_pay;?></strong></p>
                 </div>
             </div>
         </div>
