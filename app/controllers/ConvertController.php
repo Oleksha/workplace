@@ -6,6 +6,8 @@ class ConvertController extends AppController {
 
     public function indexAction() {
         
+        //$this->updateTable();die;
+        
         // формируем метатеги для страницы
         $this->setMeta('Регистрация нового пользователя');
 
