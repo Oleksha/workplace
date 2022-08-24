@@ -48,9 +48,23 @@ class ConvertController extends AppController {
             $bos_id = rtrim($bos_id, ';');
             $payment['num_bo_id'] = $bos_id;
             /****** добавляем идентификаторы БО ******/
-            debug($payment);
-        }     
-        //debug($payments);   
+            // ДОБАВИТЬ ОБНОВЛЕНИЕ ТАБЛИЦЫ PAYMENT
+            //debug($payment);
+        }    
+        $receipts = \R::getAssocRow("SELECT * FROM receipt"); // получаем все приходы из базы 
+        foreach ($receipts as $receipt) {
+            /****** добавляем идентификаторы оплат ******/
+            $paiment_id = '';
+            if (!empty($receipt['num_pay'])) {
+                // если есть данные об оплате
+                $paiment_id = $this->getPayment($receipt['num_pay']);
+            }          
+            $receipt['num_pay_id'] = $paiment_id;
+            /****** добавляем идентификаторы оплат ******/
+            // ДОБАВИТЬ ОБНОВЛЕНИЕ ТАБЛИЦЫ RECEIPT
+            //debug($receipt);
+        }
+        //debug($receipts);   
     }
 
     public function getReceipt($numbers) {
@@ -84,6 +98,19 @@ class ConvertController extends AppController {
         $receipt = \R::getAssocRow("SELECT * FROM budget WHERE YEAR(scenario) = {$year} AND number = '{$number}'");
         //debug($receipt);
         if (!empty($receipt)) { $receipt = $receipt[0]; return $receipt['id']; }
+        return false;
+    }
+    
+    public function getPayment($numbers) {
+        //debug($numbers);
+        $numbers = explode('/', $numbers);
+        if (!isset($numbers[1])) return false;
+        $number = $numbers[0];
+        $year = (int)$numbers[1];
+        //debug($number);debug($year);
+        $payment = \R::getAssocRow("SELECT * FROM payment WHERE YEAR(date) = {$year} AND number = '{$number}'");
+        //debug($receipt);
+        if (!empty($payment)) { $payment = $payment[0]; return $payment['id']; }
         return false;
     }
 
