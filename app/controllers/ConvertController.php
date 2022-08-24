@@ -37,9 +37,20 @@ class ConvertController extends AppController {
             $ers_id = rtrim($ers_id, ';');
             $payment['num_er_id'] = $ers_id;
             /****** добавляем идентификаторы ЕР ******/
-            //debug($payment);
+
+            /****** добавляем идентификаторы БО ******/
+            $bos_id = '';
+            $bos = explode(';', $payment['num_bo']); 
+            foreach ($bos as $bo) {
+                if ($this->getBO($bo) == false) { echo 'отсутсвует БО '.$bo. ' в оплате '.$payment['number']. ' - '.$payment['date']; return; }
+                $bos_id .= $this->getBO($bo) . ';';
+            }
+            $bos_id = rtrim($bos_id, ';');
+            $payment['num_bo_id'] = $bos_id;
+            /****** добавляем идентификаторы БО ******/
+            debug($payment);
         }     
-        debug($payments);   
+        //debug($payments);   
     }
 
     public function getReceipt($numbers) {
@@ -60,6 +71,19 @@ class ConvertController extends AppController {
         //debug($er);        
         //debug($receipt);
         if (!empty($er)) { $er = $er[0]; return $er['id']; }
+        return false;
+    }
+    
+    public function getBO($numbers) {
+        //debug($numbers);
+        $numbers = explode('/', $numbers);
+        if (!isset($numbers[1])) return false;
+        $number = $numbers[0];
+        $year = (int)$numbers[1];
+        //debug($number);debug($year);
+        $receipt = \R::getAssocRow("SELECT * FROM budget WHERE YEAR(scenario) = {$year} AND number = '{$number}'");
+        //debug($receipt);
+        if (!empty($receipt)) { $receipt = $receipt[0]; return $receipt['id']; }
         return false;
     }
 
