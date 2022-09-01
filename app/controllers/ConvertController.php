@@ -14,7 +14,7 @@ class ConvertController extends AppController {
     }
 
     public function updateTable() {
-        $payments = \R::getAssocRow("SELECT * FROM payment"); // получаем все оплаты из базы
+        $payments = \R::getAssocRow("SELECT * FROM payments"); // получаем все оплаты из базы
         foreach ($payments as $payment) {
             /****** добавляем идентификаторы приходов ******/
             $receipts_id = '';
@@ -48,8 +48,45 @@ class ConvertController extends AppController {
             $bos_id = rtrim($bos_id, ';');
             $payment['num_bo_id'] = $bos_id;
             /****** добавляем идентификаторы БО ******/
-            // ДОБАВИТЬ ОБНОВЛЕНИЕ ТАБЛИЦЫ PAYMENT
+            /* Обновление таблицы начало*/
+            // создаем массив с полями таблицы
+            /*$pay = [];
+            $pay['date'] = $payment['date'];
+            $pay['number'] = $payment['number'];
+            $pay['sum'] = $payment['sum'];
+            $pay['receipts_id'] = $payment['receipts_id'];
+            $pay['vat'] = $payment['vat'];
+            $pay['partner_id'] = $payment['id_partner'];
+            $pay['ers_id'] = $payment['num_er_id'];
+            $pay['ers_sum'] = $payment['sum_er'];
+            $pay['budgets_id'] = $payment['num_bo_id'];
+            $pay['budgets_sum'] = $payment['sum_bo'];
+            $pay['pay_date'] = $payment['date_pay'];*/
             //debug($payment);
+            $tbl = R::load('payments', $payment['id']); // подключаем источник данных payments
+            //debug($tbl);
+            /*$tbl->date = $payment['date'];
+            $tbl->number = $payment['number'];
+            $tbl->sum = $payment['sum'];
+            $tbl->receipt = $payment['receipt'];
+            $tbl->vat = $payment['vat'];
+            $tbl->id_partner = $payment['id_partner'];
+            $tbl->num_er = $payment['num_er'];
+            $tbl->sum_er = $payment['sum_er'];
+            $tbl->num_bo = $payment['num_bo'];
+            $tbl->sum_bo = $payment['sum_bo'];
+            $tbl->date_pay = $payment['date_pay'];*/
+            $tbl['receipts_id'] = $payment['receipts_id'];
+            $tbl['num_er_id'] = $payment['num_er_id'];
+            $tbl['num_bo_id'] = $payment['num_bo_id'];
+            /*foreach ($payment as $name => $value) {
+                // проходим по всем атрибутам содержащим данные для добавления
+                $tbl[$name] = $value;
+            }
+            //debug($tbl);die;*/
+            R::store($tbl);
+            /* Обновление таблицы конец*/
+            
         }    
         $receipts = \R::getAssocRow("SELECT * FROM receipt"); // получаем все приходы из базы 
         foreach ($receipts as $receipt) {
@@ -61,7 +98,9 @@ class ConvertController extends AppController {
             }          
             $receipt['num_pay_id'] = $paiment_id;
             /****** добавляем идентификаторы оплат ******/
-            // ДОБАВИТЬ ОБНОВЛЕНИЕ ТАБЛИЦЫ RECEIPT
+            $tbl = R::load('receipt', $receipt['id']); // подключаем источник данных payments
+            $tbl['num_pay_id'] = $receipt['num_pay_id'];
+            R::store($tbl);
             //debug($receipt);
         }
         //debug($receipts);   
