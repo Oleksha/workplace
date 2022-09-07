@@ -317,9 +317,9 @@ class ReceiptController extends AppController {
                     }
                 }
                 $coast = $summa - $total; // оставшаяся сумма БО
-                if (abs($sum - $coast) > $epsilon) {
-                    if ($sum > $coast) {
-                        $_SESSION['error_payment'][] = "Не хватает средств. Требуется сумма {$sum}, а в БО ({$v}) осталось {$coast}";
+                if (abs($current['summa'] - $coast) > $epsilon) {
+                    if ($current['summa'] > $coast) {
+                        $_SESSION['error_payment'][] = "Не хватает средств. Требуется сумма {$current['summa']}, а в БО ({$v}) осталось {$coast}";
                         $verify =  false;
                     }
                 }
