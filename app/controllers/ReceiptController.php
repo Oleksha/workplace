@@ -298,7 +298,7 @@ class ReceiptController extends AppController {
                         $current['summa'] = $sum;
                     }
                     if ($data['vat'] = '1.00') {
-                        $current['summa'] = $sum * 1.2;
+                        $current['summa'] = round($sum * 1.2, 2);
                     }
                 }
                 if ($bo['vat'] = '1.00') {
@@ -306,7 +306,7 @@ class ReceiptController extends AppController {
                         $current['summa'] = $sum;
                     }
                     if ($data['vat'] = '1.20') {
-                        $current['summa'] = $sum / 1.2;
+                        $current['summa'] = round($sum / 1.2, 2);
                     }
                 }
                 $summa = $bo['summa'];
