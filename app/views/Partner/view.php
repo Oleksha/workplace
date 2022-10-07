@@ -644,26 +644,30 @@
 <script type="text/javascript" src="assets/DataTables/datatables.min.js"></script>
 <script>
     $(function () {
-        $('#receiptsPartner').dataTable( {
-            "ordering": false,
-            "aLengthMenu": [[7, 15, 25, -1], [7, 15, 25, "All"]],
-            "language": {
-                "url": "/assets/DataTables/ru.json"
-            }
-        });
-        $('#paymentPartner').dataTable( {
-            "ordering": false,
-            "aLengthMenu": [[7, 15, 25, -1], [7, 15, 25, "All"]],
-            "language": {
-                "url": "/assets/DataTables/ru.json"
-            }
-        });
         $('#allPartner').dataTable( {
             "ordering": false,
             "aLengthMenu": [[7, 15, 25, -1], [7, 15, 25, "All"]],
             "language": {
                 "url": "/assets/DataTables/ru.json"
             }
-        });
+        });       
+    });
+    $(function () {
+        $('#receiptsPartner').dataTable( {
+            "ordering": false,
+            "aLengthMenu": [[7, 15, 25, -1], [7, 15, 25, "All"]],
+            "language": {
+                "url": "/assets/DataTables/ru.json"
+            }
+        });    
+    });
+    $(function () {
+        $('#paymentPartner').dataTable( {
+            "ordering": false,
+            "aLengthMenu": [[7, 15, 25, -1], [7, 15, 25, "All"]],
+            "language": {
+                "url": "/assets/DataTables/ru.json"
+            }
+        });        
     });
 </script>
