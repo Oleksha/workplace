@@ -257,17 +257,17 @@ class ReceiptController extends AppController {
                 $current['number'] = $data['number'] . '/' . substr($data['date'], 0, 4);
                 $current['summa'] = $sum;
                 // получаем остаток средств на ЕР
-                $coast = $er_obj->getBalance($v, $data['id_partner']);
-                //$pays_arr = $er_obj->getPaymentCoast($v);
-                //$er = $er_obj->getEr($v);
-                //$summa = $er['summa'];
-                //$total = 0.00;
-                //foreach ($pays_arr as $item) {
-                //    if (($item['summa'] != $current['summa']) && ($item['number'] != $current['number'])) {
-                //        $total += $item['summa'];
-                //    }
-                //}
-                //$coast = $summa - $total;
+                /*$coast = $er_obj->getBalance($v, $data['id_partner']);*/
+                $pays_arr = $er_obj->getPaymentCoastID($v, $data['id_partner']);
+                $er = $er_obj->getEr($v);
+                $summa = $er['summa'];
+                $total = 0.00;
+                foreach ($pays_arr as $item) {
+                    if (($item['summa'] != $current['summa']) && ($item['number'] != $current['number'])) {
+                        $total += $item['summa'];
+                    }
+                }
+                $coast = $summa - $total;
                 if (abs($sum - $coast) > $epsilon) {
                     if ($sum > $coast) {
                         $_SESSION['error_payment'][] = "Не хватает средств. Требуется сумма {$sum}, а в ЕР ({$v}) осталось {$coast}";
