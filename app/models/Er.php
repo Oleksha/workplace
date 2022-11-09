@@ -160,6 +160,35 @@ class Er extends AppModel {
     }
 
     /**
+     * Возвращает массив содержащий номера оплат и суммы расхода по ЕР
+     * @param $num_er string номер ЕР
+     * @return array
+     */
+    public function getPaymentCoastID(string $num_er, int $id): array {
+        $pay_obj = new Payment();       // объект ЗО
+        $er = $this->getEr($num_er);    // получаем информацию по ЕР
+        $pay = [];                      // массив содержащий возвращаемые данные
+        // получаем все оплаты использующие эту ЕР
+        $payments = $pay_obj->getPaymentEr($id, $num_er);
+        // Если оплаты есть проходимся по всему массиву
+        if ($payments) {
+            foreach ($payments as $payment) {
+                $vat = $payment['vat']; // НДС текущей ЗО
+                $nums = explode(';', $payment['num_er']); // массив всех ЕР в ЗО
+                $sums = explode(';', $payment['sum_er']); // массив всех сумм ЕР в ЗО
+                $key = array_search($er['number'], $nums);  // индекс текущей ЕР в массиве ЕР
+                $sum = $sums[$key];                         // сумма текущей ЕР
+                // запоминаем внутренний номер ЗО в формате TOF0000000000/2022
+                $pay_er['number'] = $payment['number'] . '/' . substr($payment['date'], 0, 4);
+                // запоминаем сумму ЕР без НДС
+                $pay_er['summa'] = round($sum / $vat, 2);
+                $pay[] = $pay_er; // добавляем полученные данные в массив оплат
+            }
+        }
+        return $pay;
+    }
+
+    /**
      * Возвращает информацию по ЕР
      * @param $num_er string номер ER
      * @return array
