@@ -256,10 +256,14 @@ class ReceiptController extends AppController {
                 // получаем текущие данные
                 $current['number'] = $data['number'] . '/' . substr($data['date'], 0, 4);
                 $current['summa'] = $sum;
+                $er = $er_obj->getEr($v);
+                if (is_null($er)) {
+                    $_SESSION['error_payment'][] = "Отсутствуют данные по EP ({$v})";
+                    return false;
+                }
                 // получаем остаток средств на ЕР
                 /*$coast = $er_obj->getBalance($v, $data['id_partner']);*/
                 $pays_arr = $er_obj->getPaymentCoastID($v, $data['id_partner']);
-                $er = $er_obj->getEr($v);
                 $summa = $er['summa'];
                 $total = 0.00;
                 foreach ($pays_arr as $item) {
@@ -290,8 +294,7 @@ class ReceiptController extends AppController {
                 $bo = $bo_obj->getBo($v);
                 if (is_null($bo)) {
                     $_SESSION['error_payment'][] = "Отсутствуют данные по БО ({$v})";
-                    $verify =  false;
-                    return;
+                    return false;
                 }
                 // получаем все оплаты по этой <БО>
                 $pays_arr = $bo_obj->getPaymentCoast($v);
