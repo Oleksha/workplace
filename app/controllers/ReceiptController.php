@@ -287,10 +287,14 @@ class ReceiptController extends AppController {
             $sums = explode(';', $data['sum_bo']);
             foreach ($bos as $k => $v) {
                 $sum = $sums[$k];
-
+                $bo = $bo_obj->getBo($v);
+                if (is_null($bo)) {
+                    $_SESSION['error_payment'][] = "Отсутствуют данные по БО ({$v})";
+                    $verify =  false;
+                    return;
+                }
                 // получаем все оплаты по этой <БО>
                 $pays_arr = $bo_obj->getPaymentCoast($v);
-                $bo = $bo_obj->getBo($v);
                 // получаем текущие данные
                 $current['number'] = $data['number'] . '/' . substr($data['date'], 0, 4);
                 if ($bo['vat'] = '1.20') {
