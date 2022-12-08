@@ -196,7 +196,7 @@ class Er extends AppModel {
     public function getEr(string $num_er): array {
         $er_arr = [];
         $er = R::getAssocRow('SELECT er.*, budget_items.name_budget_item FROM er, budget_items WHERE (budget_items.id = er.id_budget_item) AND number = ?', [$num_er]);
-        if (!is_null($er)) $er_arr = $er[0];
+        if ($er) $er_arr = $er[0];
         return $er_arr;
     }
 
