@@ -257,7 +257,7 @@ class ReceiptController extends AppController {
                 $current['number'] = $data['number'] . '/' . substr($data['date'], 0, 4);
                 $current['summa'] = $sum;
                 $er = $er_obj->getEr($v);
-                if (is_null($er)) {
+                if (!$er) {
                     $_SESSION['error_payment'][] = "Отсутствуют данные по EP ({$v})";
                     return false;
                 }
@@ -292,7 +292,7 @@ class ReceiptController extends AppController {
             foreach ($bos as $k => $v) {
                 $sum = $sums[$k];
                 $bo = $bo_obj->getBo($v);
-                if (is_null($bo)) {
+                if (!$bo) {
                     $_SESSION['error_payment'][] = "Отсутствуют данные по БО ({$v})";
                     return false;
                 }
