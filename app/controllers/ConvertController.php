@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use RedBeanPHP\R;
+
 class ConvertController extends AppController {
 
     public function indexAction() {
@@ -14,39 +16,39 @@ class ConvertController extends AppController {
     }
 
     public function updateTable() {
-        $payments = \R::getAssocRow("SELECT * FROM payments"); // получаем все оплаты из базы
+        $payments = \R::getAssocRow("SELECT * FROM payment"); // получаем все оплаты из базы
         foreach ($payments as $payment) {
             /****** добавляем идентификаторы приходов ******/
             $receipts_id = '';
-            $receipts = explode(';', $payment['receipt']);         
+            $receipts = explode(';', $payment['receipt']);
             foreach ($receipts as $receipt) {
                 if ($this->getReceipt($receipt) == false) { echo 'отсутсвует поступление '.$receipt; return; }
                 $receipts_id .= $this->getReceipt($receipt) . ';';
             }
-            $receipts_id = rtrim($receipts_id, ';');            
+            $receipts_id = rtrim($receipts_id, ';');
             $payment['receipts_id'] = $receipts_id;
             /****** добавляем идентификаторы приходов ******/
 
             /****** добавляем идентификаторы ЕР ******/
             $ers_id = '';
-            $ers = explode(';', $payment['num_er']); 
+            $ers = explode(';', $payment['num_er']);
             foreach ($ers as $er) {
                 if ($this->getER($er, $payment['id_partner']) == false) { echo 'отсутсвует ЕР '.$er. ' в оплате '.$payment['id_partner']; return; }
                 $ers_id .= $this->getER($er, $payment['id_partner']) . ';';
             }
             $ers_id = rtrim($ers_id, ';');
-            $payment['num_er_id'] = $ers_id;
+            $payment['ers_id'] = $ers_id;
             /****** добавляем идентификаторы ЕР ******/
 
             /****** добавляем идентификаторы БО ******/
             $bos_id = '';
-            $bos = explode(';', $payment['num_bo']); 
+            $bos = explode(';', $payment['num_bo']);
             foreach ($bos as $bo) {
                 if ($this->getBO($bo) == false) { echo 'отсутсвует БО '.$bo. ' в оплате '.$payment['number']. ' - '.$payment['date']; return; }
                 $bos_id .= $this->getBO($bo) . ';';
             }
             $bos_id = rtrim($bos_id, ';');
-            $payment['num_bo_id'] = $bos_id;
+            $payment['bos_id'] = $bos_id;
             /****** добавляем идентификаторы БО ******/
             /* Обновление таблицы начало*/
             // создаем массив с полями таблицы
@@ -63,7 +65,7 @@ class ConvertController extends AppController {
             $pay['budgets_sum'] = $payment['sum_bo'];
             $pay['pay_date'] = $payment['date_pay'];*/
             //debug($payment);
-            $tbl = R::load('payments', $payment['id']); // подключаем источник данных payments
+            $tbl = R::load('payment', $payment['id']); // подключаем источник данных payments
             //debug($tbl);
             /*$tbl->date = $payment['date'];
             $tbl->number = $payment['number'];
@@ -77,8 +79,8 @@ class ConvertController extends AppController {
             $tbl->sum_bo = $payment['sum_bo'];
             $tbl->date_pay = $payment['date_pay'];*/
             $tbl['receipts_id'] = $payment['receipts_id'];
-            $tbl['num_er_id'] = $payment['num_er_id'];
-            $tbl['num_bo_id'] = $payment['num_bo_id'];
+            $tbl['ers_id'] = $payment['ers_id'];
+            $tbl['bos_id'] = $payment['bos_id'];
             /*foreach ($payment as $name => $value) {
                 // проходим по всем атрибутам содержащим данные для добавления
                 $tbl[$name] = $value;
@@ -86,20 +88,20 @@ class ConvertController extends AppController {
             //debug($tbl);die;*/
             R::store($tbl);
             /* Обновление таблицы конец*/
-            
-        }    
-        $receipts = \R::getAssocRow("SELECT * FROM receipt"); // получаем все приходы из базы 
+
+        }
+        $receipts = \R::getAssocRow("SELECT * FROM receipt"); // получаем все приходы из базы
         foreach ($receipts as $receipt) {
             /****** добавляем идентификаторы оплат ******/
             $paiment_id = '';
             if (!empty($receipt['num_pay'])) {
                 // если есть данные об оплате
                 $paiment_id = $this->getPayment($receipt['num_pay']);
-            }          
-            $receipt['num_pay_id'] = $paiment_id;
+            }
+            $receipt['pay_id'] = $paiment_id;
             /****** добавляем идентификаторы оплат ******/
             $tbl = R::load('receipt', $receipt['id']); // подключаем источник данных payments
-            $tbl['num_pay_id'] = $receipt['num_pay_id'];
+            $tbl['pay_id'] = $receipt['pay_id'];
             R::store($tbl);
             //debug($receipt);
         }

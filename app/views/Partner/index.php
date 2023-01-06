@@ -12,7 +12,7 @@
         </nav>
         <?php /** @var array $partners */
         if($partners): ?>
-        <table id="partner_index" class="table display" style="width:100%">
+            <table id="partner_index" class="table display">
                 <thead>
                 <tr>
                     <th>Наименование</th>
@@ -27,7 +27,7 @@
                 <tbody>
                 <?php foreach ($partners as $partner): ?>
                     <tr>
-                        <th><a href="partner/<?= $partner['inn'];?>"><?= $partner['name'];?></a></th>
+                        <th><a href="partner/<?= $partner['id'];?>"><?= $partner['name'];?></a></th>
                         <td><?= $partner['address'];?></td>
                         <td><?= $partner['inn'];?></td>
                         <td><?= $partner['kpp'];?></td>
@@ -39,9 +39,9 @@
                 </tbody>
             </table>
         <?php else : ?>
-        <div class="row text-center p-2">
-            <h2>Информации об активных КА не найдено</h2>
-        </div>
+            <div class="row text-center p-2">
+                <h2>Информации об активных КА не найдено</h2>
+            </div>
         <?php endif; ?>
     </div>
 </main>
@@ -49,25 +49,25 @@
 <script>
     $(function () {
         $('#partner_index').dataTable( {
-        "aLengthMenu": [[8, 15, 25, -1], [8, 15, 25, "All"]],
-        "language": {
-            "url": "/assets/DataTables/ru.json"
-        },
-        "aoColumns": [
-            null,
-            {"bSearchable": false },
-            {"sClass": "text-center",
-                "bSearchable": false },
-            {"sClass": "text-center",
-                "bSearchable": false },
-            {"sClass": "text-center",
-                "bSearchable": false },
-            {"sClass": "text-center",
-                "bSearchable": false },
-            {"sClass": "text-center",
-                "bSearchable": false },
+            "aLengthMenu": [[8, 15, 25, -1], [8, 15, 25, "All"]],
+            "language": {
+                "url": "/assets/DataTables/ru.json"
+            },
+            "aoColumns": [
+                null,
+                {"bSearchable": false },
+                {"sClass": "text-center",
+                    "bSearchable": false },
+                {"sClass": "text-center",
+                    "bSearchable": false },
+                {"sClass": "text-center",
+                    "bSearchable": false },
+                {"sClass": "text-center",
+                    "bSearchable": false },
+                {"sClass": "text-center",
+                    "bSearchable": false },
 
-        ]
+            ]
         });
     });
 </script>

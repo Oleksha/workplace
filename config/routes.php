@@ -3,7 +3,7 @@
 use workplace\Router;
 
 // пользовательские маршруты
-Router::add('^partner/(?P<inn>[A-ZА-Я0-9]+)/?$', ['controller' => 'Partner', 'action' => 'view']);
+Router::add('^partner/(?P<id>[0-9]+)/?$', ['controller' => 'Partner', 'action' => 'view']);
 
 // добавляем маршруты по умолчанию
 Router::add('^admin$', ['controller' => 'Main', 'action' => 'index', 'prefix' => 'admin']);

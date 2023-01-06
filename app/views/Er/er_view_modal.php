@@ -16,11 +16,11 @@
             <?php $sum = 0.00; ?>
             <?php foreach ($payments as $payment) : ?>
             <?php
-                $nums = explode(';', trim($payment->num_er));
-                $sums = explode(';', trim($payment->sum_er));
-                $key = array_search($er->number, $nums);
+                $ids = explode(';', trim($payment['ers_id']));
+                $sums = explode(';', trim($payment['sum_er']));
+                $key = array_search($er['id'], $ids);
                 $sum += $sums[$key];
-                $vat = $payment->vat;
+                $vat = $payment['vat'];
             ?>
             <tr>
                 <td class="text-center h-100 align-middle"><?= $payment['date_pay'];?></td>

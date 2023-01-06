@@ -9,13 +9,16 @@ class Payment extends AppModel {
         'date' => '',
         'number' => '',
         'sum' => '',
+        'receipt' => '',
+        'receipts_id' => '',
         'vat' => '',
         'id_partner' => 0,
-        'receipt' => '',
         'num_er' => null,
+        'ers_id' => null,
         'sum_er' => null,
-        'num_bo' => '',
-        'sum_bo' => '',
+        'num_bo' => null,
+        'bos_id' => null,
+        'sum_bo' => null,
         'date_pay' => null,
     ];
 
@@ -60,13 +63,16 @@ class Payment extends AppModel {
 
     /**
      * Возвращает массив всех оплат по конкретной ЕР
-     * @param $id string идентификатор КА
-     * @param $er string номер ЕР
+     * @param $id int идентификатор ЕР
      * @return array|false
      */
-    public function getPaymentEr($id, $er) {
-        $er_num = '%' . $er . '%';
-        $payments = \R::getAssocRow("SELECT * FROM payment WHERE (id_partner = ?) AND (num_er LIKE ?)", [$id, $er_num]);
+    public function getPaymentEr(int $id) {
+        // получаем массив всех оплат
+        $payments_all = \R::getAssocRow("SELECT * FROM payment");
+        $payments = [];
+        foreach ($payments_all as $payment) {
+            if (in_array($id, explode(';', $payment['ers_id']))) $payments[] = $payment;
+        }
         if (!empty($payments)) return $payments;
         return false;
     }
@@ -76,28 +82,49 @@ class Payment extends AppModel {
      * @param $er string наименование КА
      * @return array|false
      */
-    public function getPayment($er) {
+    /*public function getPayment($er) {
         $er_num = '%' . $er . '%';
         $payments = \R::getAssocRow("SELECT * FROM payment WHERE num_er LIKE ?", [$er_num]);
         if (!empty($payments)) return $payments;
         return false;
-    }
+    }*/
 
     /**
      * Возвращает массив всех оплат по конкретной ЕР
      * @param $bo string наименование КА
      * @return array|false
      */
-    public function getPaymentBo($bo) {
+    /*public function getPaymentBo($bo) {
         $bo_num = '%' . $bo . '%';
         //debug($bo_num);
         $payments = \R::getAssocRow("SELECT * FROM payment WHERE num_bo LIKE ?", [$bo_num]);
         if (!empty($payments)) return $payments;
         return false;
+    }*/
+
+    /**
+     * Получаем ЗО которая оплачивала наш приход
+     * @param $receipt_id
+     * @return false|array
+     */
+    public function getPaymentReceipt($receipt_id) {
+        // получаем все оплаты
+        $payments = \R::getAssocRow("SELECT * FROM payment");
+        foreach ($payments as $payment) {
+            // получаем идентификаторы приходов в ЗО
+            $ids = explode(';', $payment['receipts_id']);
+            // если наш приход есть в этой ЗО возвращаем ее
+            if (in_array($receipt_id, $ids)) return $payment;
+        }
+        return false;
     }
 
-    public function getPaymentFromReceipt($receipt) {
-        $payments = \R::getAssocRow("SELECT * FROM payment WHERE receipt LIKE ?", [$receipt]);
+    /**
+     * Возвращает массив всех оплат
+     * @return array|false
+     */
+    public function getPaymentAll() {
+        $payments = \R::getAssocRow("SELECT * FROM payment");
         if (!empty($payments)) return $payments;
         return false;
     }

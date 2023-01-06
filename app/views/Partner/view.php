@@ -60,14 +60,32 @@
                                                             <td class="text-center h-100 align-middle"><?= $item['date_doc'];?></td>
                                                             <td class="h-100 align-middle"><?= $item['note'];?></td>
                                                             <td class="text-center h-100 align-middle"><?= $item['date_pay'];?></td>
-                                                            <td class="text-center h-100 align-middle">
-                                                                <a type="button" href="partner/payment?receipt=<?= $item['id'];?>" class="btn btn-outline-primary btn-sm my-btn" data-toggle="tooltip" data-placement="top" title="Оплата">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
+                                                            <?php
+                                                            $title = '';
+                                                            if ($item['type'] == 1) {
+                                                                $title = 'Просмотреть';
+                                                                $svg = '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-zoom-out" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                                        <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                                                                        <path d="M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z"/>
+                                                                    </svg>';
+                                                            } elseif ($item['type'] == 2) {
+                                                                $title = 'Изменить';
+                                                                $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
+                                                                        </svg>';
+                                                            } elseif ($item['type'] == 3) {
+                                                                $title = 'Оплатить';
+                                                                $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
                                                                         <path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0z" fill="green"/>
                                                                         <path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1h-.003zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195l.054.012z" fill="green"/>
                                                                         <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083c.058-.344.145-.678.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1H1z" fill="green"/>
                                                                         <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 5.982 5.982 0 0 1 3.13-1.567z" fill="green"/>
-                                                                    </svg>
+                                                                    </svg>';
+                                                            }
+                                                            ?>
+                                                            <td class="text-center h-100 align-middle">
+                                                                <a type="button" href="partner/payment?receipt=<?= $item['id'];?>&type=<?= $item['type'];?>" class="btn btn-outline-primary btn-sm my-btn" data-toggle="tooltip" data-placement="top" title="<?= $title; ?>">
+                                                                    <?= $svg; ?>
                                                                 </a>
                                                                 <a type="button" class="btn btn-outline-primary btn-sm my-btn" data-toggle="tooltip" data-placement="top" title="Удалить" href="receipt/del?id=<?= $item['id'];?>" onclick="return window.confirm('OK?');">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
@@ -116,14 +134,32 @@
                                                             <td class="text-center h-100 align-middle"><?= $item['date_doc'];?></td>
                                                             <td class="h-100 align-middle"><?= $item['note'];?></td>
                                                             <td class="text-center h-100 align-middle"><?= $item['date_pay'];?></td>
-                                                            <td class="text-center h-100 align-middle">
-                                                                <a type="button" href="partner/payment?receipt=<?= $item['id'];?>" class="btn btn-outline-primary btn-sm my-btn" data-toggle="tooltip" data-placement="top" title="Оплата">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
+                                                            <?php
+                                                            $title = '';
+                                                            if ($item['type'] == 1) {
+                                                                $title = 'Просмотреть';
+                                                                $svg = '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-zoom-out" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                                        <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                                                                        <path d="M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z"/>
+                                                                    </svg>';
+                                                            } elseif ($item['type'] == 2) {
+                                                                $title = 'Изменить';
+                                                                $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
+                                                                        </svg>';
+                                                            } elseif ($item['type'] == 3) {
+                                                                $title = 'Оплатить';
+                                                                $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
                                                                         <path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0z" fill="green"/>
                                                                         <path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1h-.003zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195l.054.012z" fill="green"/>
                                                                         <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083c.058-.344.145-.678.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1H1z" fill="green"/>
                                                                         <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 5.982 5.982 0 0 1 3.13-1.567z" fill="green"/>
-                                                                    </svg>
+                                                                    </svg>';
+                                                            }
+                                                            ?>
+                                                            <td class="text-center h-100 align-middle">
+                                                                <a type="button" href="partner/payment?receipt=<?= $item['id'];?>&type=<?= $item['type'];?>" class="btn btn-outline-primary btn-sm my-btn" data-toggle="tooltip" data-placement="top" title="<?= $title; ?>">
+                                                                    <?= $svg; ?>
                                                                 </a>
                                                                 <a type="button" class="btn btn-outline-primary btn-sm my-btn" data-toggle="tooltip" data-placement="top" title="Удалить" href="receipt/del?id=<?= $item['id'];?>" onclick="return window.confirm('OK?');">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
@@ -171,15 +207,33 @@
                                                         <td class="text-center h-100 align-middle"><?= $item['date_doc'];?></td>
                                                         <td class="h-100 align-middle"><?= $item['note'];?></td>
                                                         <td class="text-center h-100 align-middle"><?= $item['date_pay'];?></td>
-                                                        <td class="text-center h-100 align-middle">
-                                                            <a type="button" href="partner/payment?receipt=<?= $item['id'];?>" class="btn btn-outline-primary btn-sm my-btn" data-toggle="tooltip" data-placement="top" title="Оплата">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
+                                                        <?php
+                                                        $title = '';
+                                                        if ($item['type'] == 1) {
+                                                            $title = 'Просмотреть';
+                                                            $svg = '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-zoom-out" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                                        <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                                                                        <path d="M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z"/>
+                                                                    </svg>';
+                                                        } elseif ($item['type'] == 2) {
+                                                            $title = 'Изменить';
+                                                            $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
+                                                                        </svg>';
+                                                        } elseif ($item['type'] == 3) {
+                                                            $title = 'Оплатить';
+                                                            $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
                                                                         <path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0z" fill="green"/>
                                                                         <path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1h-.003zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195l.054.012z" fill="green"/>
                                                                         <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083c.058-.344.145-.678.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1H1z" fill="green"/>
                                                                         <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 5.982 5.982 0 0 1 3.13-1.567z" fill="green"/>
-                                                                    </svg>
-                                                                </a>
+                                                                    </svg>';
+                                                        }
+                                                        ?>
+                                                        <td class="text-center h-100 align-middle">
+                                                            <a type="button" href="partner/payment?receipt=<?= $item['id'];?>&type=<?= $item['type'];?>" class="btn btn-outline-primary btn-sm my-btn" data-toggle="tooltip" data-placement="top" title="<?= $title; ?>">
+                                                                <?= $svg; ?>
+                                                            </a>
                                                                 <a type="button" class="btn btn-outline-primary btn-sm my-btn" data-toggle="tooltip" data-placement="top" title="Удалить" href="receipt/del?id=<?= $item['id'];?>" onclick="return window.confirm('OK?');">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                                                                         <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z" fill="red"/>
@@ -234,18 +288,18 @@
                                                     $selector = 'alert alert-warning';
                                                     $class_date = 'class="alert-warning"';
                                                 }
-                                                if (($er['summa'] - $er['cost']) < ($er['summa'] * 0.03))
+                                                if (($er['summa'] - $er['costs']) < ($er['summa'] * 0.03))
                                                 {
                                                     $selector = 'alert alert-warning';
                                                 }
-                                                if (($er['summa'] - $er['cost']) <= 0)
+                                                if (($er['summa'] - $er['costs']) <= 0)
                                                 {
                                                     $selector = 'alert alert-danger';
                                                 }?>
                                                 <div class="row align-items-center" id="erPartner">
                                                     <div class="col-12">
                                                         <div class="<?= $selector; ?>" role="alert">
-                                                            <?= $er['name_budget_item'];?> - <b><i><?= $er['number'];?></i></b> - Осталось: <b><?= number_format($er['summa'] - $er['cost'], 2, ',', '&nbsp;');?>&nbsp;₽</b>
+                                                            <?= $er['name_budget_item'];?> - <b><i><?= $er['number'];?></i></b> - Осталось: <b><?= number_format($er['summa'] - $er['costs'], 2, ',', '&nbsp;');?>&nbsp;₽</b>
                                                         </div>
                                                         <div class="row d-flex align-items-center">
                                                             <div class="input-group mb-3">
@@ -253,12 +307,12 @@
                                                                 <input type="text" aria-label="ИНН" class="form-control" value="<?= $er['data_start'];?> / <?= $er['data_end'];?>" disabled>
                                                                 <span class="input-group-text">Cумма:</span>
                                                                 <input type="text" aria-label="ИНН" class="form-control" value="<?= number_format($er['summa'], 2, ',', '&nbsp;');?>&nbsp;₽" disabled>
-                                                                <button class="btn btn-outline-success view-er-link" type="button" id="button-addon1" data-partner="<?= $partner['id'];?>" data-id="<?= $er['id'];?>" data-toggle="tooltip" data-placement="top" title="Просмотреть" data-bs-toggle="modal" data-bs-target="#viewERModal">
+                                                                <button class="btn btn-outline-success view-er-link" type="button" id="button-addon1" data-id="<?= $er['id'];?>" data-toggle="tooltip" data-placement="top" title="Просмотреть" data-bs-toggle="modal" data-bs-target="#viewERModal">
                                                                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-zoom-out" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                                         <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
                                                                         <path d="M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z"/>
                                                                     </svg></button>
-                                                                <button class="btn btn-outline-primary edit-er-link" data-id="<?= $er['id'];?>" data-partner_id="<?= $partner['id'];?>" type="button" id="button-addon2"  data-toggle="tooltip" data-placement="top" title="Изменить" data-bs-toggle="modal" data-bs-target="#editERModal">
+                                                                <button class="btn btn-outline-primary edit-er-link" data-id="<?= $er['id'];?>" type="button" id="button-addon2"  data-toggle="tooltip" data-placement="top" title="Изменить" data-bs-toggle="modal" data-bs-target="#editERModal">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                                                                         <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
                                                                     </svg></button>
@@ -294,12 +348,12 @@
                                                                 <input type="text" aria-label="ИНН" class="form-control" value="<?= $er['data_start'];?> / <?= $er['data_end'];?>" disabled>
                                                                 <span class="input-group-text">Cумма:</span>
                                                                 <input type="text" aria-label="ИНН" class="form-control" value="<?= number_format($er['summa'], 2, ',', '&nbsp;');?>&nbsp;₽" disabled>
-                                                                <button class="btn btn-outline-success view-er-link" type="button" id="button-addon1" data-partner="<?= $partner['id'];?>" data-id="<?= $er['id'];?>" data-toggle="tooltip" data-placement="top" title="Просмотреть" data-bs-toggle="modal" data-bs-target="#viewERModal">
+                                                                <button class="btn btn-outline-success view-er-link" type="button" id="button-addon1" data-id="<?= $er['id'];?>" data-toggle="tooltip" data-placement="top" title="Просмотреть" data-bs-toggle="modal" data-bs-target="#viewERModal">
                                                                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-zoom-out" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                                                         <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
                                                                         <path d="M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z"/>
                                                                     </svg></button>
-                                                                <button class="btn btn-outline-primary edit-er-link" data-id="<?= $er['id'];?>" data-partner_id="<?= $partner['id'];?>" type="button" id="button-addon2"  data-toggle="tooltip" data-placement="top" title="Изменить" data-bs-toggle="modal" data-bs-target="#editERModal">
+                                                                <button class="btn btn-outline-primary edit-er-link" data-id="<?= $er['id'];?>" type="button" id="button-addon2"  data-toggle="tooltip" data-placement="top" title="Изменить" data-bs-toggle="modal" data-bs-target="#editERModal">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                                                                         <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
                                                                     </svg></button>
@@ -380,7 +434,7 @@
                 <h5 class="modal-title">Редактирование данных юридического лица</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
             </div>
-            <form method="post" action="partner/edit-ka" id="er_edit" class="was-validated">
+            <form method="post" action="partner/edit-partner" id="partner_edit" class="was-validated">
                 <div class="row g-3 modal-body">
 
                 </div>
@@ -569,13 +623,11 @@
         $('body').on('click', '.edit-er-link', function (e) {
             e.preventDefault(); // отменяем действие по умолчанию для ссылки или кнопки
             // получаем необходимые нам данные
-            let id = $(this).data('id'), // идентификатор ЕР
-                partner = $(this).data('partner_id'); // идентификатор КА
-
+            let id = $(this).data('id') // идентификатор ЕР
             // отправляем стандартный аякс запрос на сервер
             $.ajax({
                 url: '/er/edit', // всегда указываем от корня
-                data: {id: id, partner: partner}, // передаем данные
+                data: {id: id}, // передаем данные
                 type: 'GET', // тип передаваемого запроса
                 success: function (res) {
                     // если данные получены
@@ -590,12 +642,11 @@
         $('body').on('click', '.add-er-link', function (e) {
             e.preventDefault(); // отменяем действие по умолчанию для ссылки или кнопки
             // получаем необходимые нам данные
-            let partner = $(this).data('id'); // идентификатор КА
-
+            let id = $(this).data('id'); // идентификатор КА
             // отправляем стандартный аякс запрос на сервер
             $.ajax({
                 url: '/er/add', // всегда указываем от корня
-                data: {partner: partner}, // передаем данные
+                data: {id: id}, // передаем данные
                 type: 'GET', // тип передаваемого запроса
                 success: function (res) {
                     // если данные получены
@@ -610,12 +661,11 @@
         $('body').on('click', '.view-er-link', function (e) {
             e.preventDefault(); // отменяем действие по умолчанию для ссылки или кнопки
             // получаем необходимые нам данные
-            let id = $(this).data('id'), // идентификатор ЕР
-                partner = $(this).data('partner') // наименование КА
+            let id = $(this).data('id') // идентификатор ЕР
             // отправляем стандартный аякс запрос на сервер
             $.ajax({
                 url: '/er/view', // всегда указываем от корня
-                data: {id: id, partner: partner}, // передаем данные
+                data: {id: id}, // передаем данные
                 type: 'GET', // тип передаваемого запроса
                 success: function (res) {
                     // если данные получены
@@ -644,30 +694,26 @@
 <script type="text/javascript" src="assets/DataTables/datatables.min.js"></script>
 <script>
     $(function () {
-        $('#allPartner').dataTable( {
-            "ordering": false,
-            "aLengthMenu": [[7, 15, 25, -1], [7, 15, 25, "All"]],
-            "language": {
-                "url": "/assets/DataTables/ru.json"
-            }
-        });       
-    });
-    $(function () {
         $('#receiptsPartner').dataTable( {
             "ordering": false,
             "aLengthMenu": [[7, 15, 25, -1], [7, 15, 25, "All"]],
             "language": {
                 "url": "/assets/DataTables/ru.json"
             }
-        });    
-    });
-    $(function () {
+        });
         $('#paymentPartner').dataTable( {
             "ordering": false,
             "aLengthMenu": [[7, 15, 25, -1], [7, 15, 25, "All"]],
             "language": {
                 "url": "/assets/DataTables/ru.json"
             }
-        });        
+        });
+        $('#allPartner').dataTable( {
+            "ordering": false,
+            "aLengthMenu": [[7, 15, 25, -1], [7, 15, 25, "All"]],
+            "language": {
+                "url": "/assets/DataTables/ru.json"
+            }
+        });
     });
 </script>

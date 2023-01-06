@@ -80,5 +80,5 @@
 </div>
 <input type="hidden" name="alias" value="<?=isset($_SESSION['form_data']['alias']) ? h($_SESSION['form_data']['alias']) : '';?>">
 <input type="hidden" name="inn" value="<?=isset($_SESSION['form_data']['inn']) ? h($_SESSION['form_data']['inn']) : '';?>">
-<input type="hidden" name="id_ka" value="<?=isset($_SESSION['form_data']['id']) ? h($_SESSION['form_data']['id']) : '';?>">
+<input type="hidden" name="partner_id" value="<?=isset($_SESSION['form_data']['id']) ? h($_SESSION['form_data']['id']) : '';?>">
 

@@ -10,7 +10,6 @@
                 <li class="breadcrumb-item active" aria-current="page">Бюджетные операции</li>
             </ol>
         </nav>
-
         <div class="breadcrumb filters">
             <div class="col-auto me-3">
                 <div class="input-group">
@@ -19,6 +18,7 @@
                         <option value="2021" <?php /** @var string $year */
                         if ($year == '2021') echo ' selected'; ?>>2021</option>
                         <option value="2022" <?php if ($year == '2022') echo ' selected'; ?>>2022</option>
+                        <option value="2023" <?php if ($year == '2023') echo ' selected'; ?>>2023</option>
                     </select>
                 </div>
             </div>

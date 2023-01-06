@@ -17,22 +17,22 @@ class ReceiptController extends AppController {
      */
     public function editAction() {
         // создаем необходимые объекты связи с БД
-        $receipt_obj = new Receipt(); // для прихода
-        $ka_obj = new Partner();      // для контрагента        
+        $receipt_model = new Receipt(); // для прихода
+        $partner_model = new Partner();      // для контрагента
         // получаем переданный идентификатор прихода
         $id = !empty($_GET['id']) ? (int)$_GET['id'] : null;
         $receipt = null;
         if ($id) {
             // если у нас есть ID получаем все данные об этом приходе
-            $receipt = $receipt_obj->getReceipt('id', $id);
+            $receipt = $receipt_model->getReceipt('id', $id);
             $receipt = $receipt[0];
             if (!$receipt) die; // если такого прихода нет дальнейшие действия бессмысленны
             // получаем все данные о КА
-            $partner = $ka_obj->getPartnerByID($receipt['id_partner']);
-        }
-        if ($this->isAjax()) {
-            // Если запрос пришел АЯКСом
-            $this->loadView('receipt_edit_modal', compact('receipt', 'partner'));
+            $partner = $partner_model->getPartner($receipt['id_partner']);
+            if ($this->isAjax()) {
+                // Если запрос пришел АЯКСом
+                $this->loadView('receipt_edit_modal', compact('receipt', 'partner'));
+            }
         }
         redirect();
     }
@@ -57,8 +57,8 @@ class ReceiptController extends AppController {
     public function addAction() {
         // получаем данные пришедшие методом GET
         $id = !empty($_GET['id']) ? $_GET['id'] : null; // Идентификатор КА
-        $ka_obj = new Partner();
-        $partner = $ka_obj->getPartnerByID($id);
+        $partner_model = new Partner();
+        $partner = $partner_model->getPartner($id);
         if ($this->isAjax()) {
             // Если запрос пришел АЯКСом
             $this->loadView('receipt_add_modal', compact('partner'));
@@ -209,27 +209,35 @@ class ReceiptController extends AppController {
 
     /**
      * проверка правильности заполнения полей формы
-     * @param $data
-     * @return bool
+     * @param $data array проверяемый массив
+     * @return bool TRUE ошибок нет FALSE есть ошибки
      */
-    protected function checkPay($data) {
-        $verify = true;
-        if (!$this->checkNumBO($data['num_bo'], substr($data['date'], 0, 4))) {
+    protected function checkPay(array $data): bool
+    {
+        //debug($data);die;
+        $verify = true; // по умолчанию ошибок нет
+        if (!$this->checkNumBO($data['num_bo'])) {
             $_SESSION['error_payment'][] = 'Ошибка заполнения поля НОМЕР БО';
             $verify = false;
         }
         if (count($data['receipt']) != count($data['sum'])) {
-            $_SESSION['error_payment'][] = 'Не совпадает количество выбранных приходов и сумм';
+            $y = count($data['receipt']);
+            $x = count($data['sum']);
+            $_SESSION['error_payment'][] = "Не совпадает количество выбранных приходов ({$y}) и сумм ({$x})";
             $verify =  false;
         }
         if (count($data['num_er']) != count(explode(';', $data['sum_er']))) {
-            $_SESSION['error_payment'][] = 'Не совпадает количество выбранных ЕР и введенных сумм';
+            $y = count($data['num_er']);
+            $x = count(explode(';', $data['sum_er']));
+            $_SESSION['error_payment'][] = "Не совпадает количество выбранных ЕР ({$y}) и введенных сумм ({$x})";
             $verify =  false;
         }
         if (count(explode(';', $data['num_bo'])) != count(explode(';', $data['sum_bo']))) {
-            $_SESSION['error_payment'][] = 'Не совпадает количество введенных БО и введенных сумм';
+            $y = count(explode(';', $data['num_bo']));
+            $x = count(explode(';', $data['sum_bo']));
+            $_SESSION['error_payment'][] = "Не совпадает количество введенных БО ({$y}) и введенных сумм ({$x})";
             $verify =  false;
-        }
+        }/*
         $a = array_sum($data['sum']);
         $b = array_sum(explode(';', $data['sum_er']));
         $epsilon = 0.00001;
@@ -256,22 +264,18 @@ class ReceiptController extends AppController {
                 // получаем текущие данные
                 $current['number'] = $data['number'] . '/' . substr($data['date'], 0, 4);
                 $current['summa'] = $sum;
-                $er = $er_obj->getEr($v);
-                if (!$er) {
-                    $_SESSION['error_payment'][] = "Отсутствуют данные по EP ({$v})";
-                    return false;
-                }
                 // получаем остаток средств на ЕР
-                /*$coast = $er_obj->getBalance($v, $data['id_partner']);*/
-                $pays_arr = $er_obj->getPaymentCoastID($v, $data['id_partner']);
-                $summa = $er['summa'];
-                $total = 0.00;
-                foreach ($pays_arr as $item) {
-                    if (($item['summa'] != $current['summa']) && ($item['number'] != $current['number'])) {
-                        $total += $item['summa'];
-                    }
-                }
-                $coast = $summa - $total;
+                $coast = $er_obj->getBalance($v, $data['id_partner']);
+                //$pays_arr = $er_obj->getPaymentCoast($v);
+                //$er = $er_obj->getEr($v);
+                //$summa = $er['summa'];
+                //$total = 0.00;
+                //foreach ($pays_arr as $item) {
+                //    if (($item['summa'] != $current['summa']) && ($item['number'] != $current['number'])) {
+                //        $total += $item['summa'];
+                //    }
+                //}
+                //$coast = $summa - $total;
                 if (abs($sum - $coast) > $epsilon) {
                     if ($sum > $coast) {
                         $_SESSION['error_payment'][] = "Не хватает средств. Требуется сумма {$sum}, а в ЕР ({$v}) осталось {$coast}";
@@ -291,13 +295,10 @@ class ReceiptController extends AppController {
             $sums = explode(';', $data['sum_bo']);
             foreach ($bos as $k => $v) {
                 $sum = $sums[$k];
-                $bo = $bo_obj->getBo($v);
-                if (!$bo) {
-                    $_SESSION['error_payment'][] = "Отсутствуют данные по БО ({$v})";
-                    return false;
-                }
+
                 // получаем все оплаты по этой <БО>
                 $pays_arr = $bo_obj->getPaymentCoast($v);
+                $bo = $bo_obj->getBo($v);
                 // получаем текущие данные
                 $current['number'] = $data['number'] . '/' . substr($data['date'], 0, 4);
                 if ($bo['vat'] = '1.20') {
@@ -305,7 +306,7 @@ class ReceiptController extends AppController {
                         $current['summa'] = $sum;
                     }
                     if ($data['vat'] = '1.00') {
-                        $current['summa'] = round($sum * 1.2, 2);
+                        $current['summa'] = $sum * 1.2;
                     }
                 }
                 if ($bo['vat'] = '1.00') {
@@ -313,7 +314,7 @@ class ReceiptController extends AppController {
                         $current['summa'] = $sum;
                     }
                     if ($data['vat'] = '1.20') {
-                        $current['summa'] = round($sum / 1.2, 2);
+                        $current['summa'] = $sum / 1.2;
                     }
                 }
                 $summa = $bo['summa'];
@@ -324,9 +325,9 @@ class ReceiptController extends AppController {
                     }
                 }
                 $coast = $summa - $total; // оставшаяся сумма БО
-                if (abs($current['summa'] - $coast) > $epsilon) {
-                    if ($current['summa'] > $coast) {
-                        $_SESSION['error_payment'][] = "Не хватает средств. Требуется сумма {$current['summa']}, а в БО ({$v}) осталось {$coast}";
+                if (abs($sum - $coast) > $epsilon) {
+                    if ($sum > $coast) {
+                        $_SESSION['error_payment'][] = "Не хватает средств. Требуется сумма {$sum}, а в БО ({$v}) осталось {$coast}";
                         $verify =  false;
                     }
                 }
@@ -336,17 +337,17 @@ class ReceiptController extends AppController {
             $b = count(explode(';', $data['sum_bo']));
             $_SESSION['error_payment'][] = "Не совпадает количество введеных БО {$a} и количество сумм БО {$b}";
             $verify =  false;
-        }
+        }*/
         return $verify;
     }
 
     /**
      * проверка правильности заполнения поля НОМЕРА БО
      * @param $data string содержимое поля
-     * @param $year string год ЗО
      * @return bool результат проверки
      */
-    protected function checkNumBO($data, $year) {
+    protected function checkNumBO(string $data): bool
+    {
         // получаем массив номера заполненных БО
         $bos = explode(';', $data);
         // просматриваем каждую строку массива
@@ -360,11 +361,9 @@ class ReceiptController extends AppController {
                 if (empty($matches)) {
                     return false;
                 } else {
-                    // проверяем правильность заполнения года
-                    $str = explode('/', $bo);
-                    $year_bo = (int)$str[1];
-                    $years = [(int)$year - 1, (int)$year, (int)$year + 1];
-                    if (!in_array($year_bo, $years)) return false;
+                    // проверяем существования БО
+                    $budget_model = new Budget();   // экземпляр модели Budget
+                    if (!($budget_model->getBo($bo))) return false;
                 }
             }
         }
@@ -376,6 +375,10 @@ class ReceiptController extends AppController {
      * @return void
      */
     public function payReceiptAction() {
+        // создаем объекты для работы с БД
+        $receipt_model = new Receipt(); // для приходов
+        $er_model = new Er();           // для ЕР
+        $budget_model = new Budget();   // экземпляр модели Budget
         // получаем данные пришедшие методом POST
         $pay_receipt = !empty($_POST) ? $_POST : null;
         // проверяем полученные данные
@@ -385,62 +388,64 @@ class ReceiptController extends AppController {
             //debug($_SESSION['form_data']);die;
             redirect();
         }
-        $receipts = $this->getReceipts($pay_receipt['receipt']); // получаем массив ID приходов
-        // исправляем данные пришедшие в виде массива        
-        $pay_receipt['num_er'] = $this->prepareData($pay_receipt['num_er']);
+        $receipts = $receipt_model->getReceipts($pay_receipt['receipt']); // получаем массив ID приходов
+        // исправляем данные пришедшие в виде массива
         $pay_receipt['sum'] = $this->prepareData($pay_receipt['sum']);
-        $pay_receipt['receipt'] = $this->prepareData($pay_receipt['receipt']);
+        $pay_receipt['receipts_id'] = $this->prepareData($pay_receipt['receipt']);
+        $str = ''; // обнуляем переменную
+        foreach ($receipts as &$value) {
+            $str .= $value['number'] . '/' . mb_substr($value['date'], 0, 4) . ';';  // добавляем значение массива с символом ; в конце
+        }
+        $pay_receipt['receipt'] = rtrim($str, ';');
+        $pay_receipt['ers_id'] = $this->prepareData($pay_receipt['num_er']);
+        $str = ''; // обнуляем переменную
+        foreach ($pay_receipt['num_er'] as &$value) {
+            $er = $er_model->getEr($value);
+            $str .= $er['number'] . ';';  // добавляем значение массива с символом ; в конце
+        }
+        $pay_receipt['num_er'] = rtrim($str, ';');
         if (empty($pay_receipt['date_pay'])) $pay_receipt['date_pay'] = null;
+        $pay_receipt['sum_er'] = $this->prepareData($pay_receipt['sum_er']);
+        // добавляем ID бюджетных операций
+        $str = ''; // обнуляем переменную
+        foreach (explode(';', $pay_receipt['num_bo']) as &$value) {
+            $bo = $budget_model->getBo($value);
+            $str .= $bo['id'] . ';';  // добавляем значение массива с символом ; в конце
+        }
+        $pay_receipt['bos_id'] = rtrim($str, ';');
         // внесение изменений в ЗО
-        $pay = new Payment();
-        $pay->load($pay_receipt);
+        $payment_model = new Payment();
+        $payment_model->load($pay_receipt);
+
         if (empty($pay_receipt['id'])) {
             // это новая ЗО
-            $pay->save('payment'); 
+            $payment_id = $payment_model->save('payment');
         } else {
             // это редактируемая ЗО
-            $pay->edit('payment', $pay_receipt['id']);            
+            $payment_model->edit('payment', $pay_receipt['id']);
+            $payment_id = $pay_receipt['id'];
         }
         // внесение изменений в приходы
-        foreach ($receipts as $value) {
-            $edit_receipt['id'] = $value['id'];
-            $edit_receipt['date'] = $value['date'];
-            $edit_receipt['number'] = $value['number'];
-            $edit_receipt['sum'] = $value['sum'];
-            $edit_receipt['type'] = $value['type'];
-            $edit_receipt['vat'] = $value['vat'];
-            $edit_receipt['partner_name'] = $value['partner'];
-            $edit_receipt['id_partner'] = $value['id_partner'];
-            $edit_receipt['num_doc'] = $value['num_doc'];
-            $edit_receipt['date_doc'] = $value['date_doc'];
-            $edit_receipt['note'] = $value['note'];
+        foreach ($receipts as $item) {
+            $edit_receipt['id'] = $item['id'];
+            $edit_receipt['date'] = $item['date'];
+            $edit_receipt['number'] = $item['number'];
+            $edit_receipt['sum'] = $item['sum'];
+            $edit_receipt['type'] = $item['type'];
+            $edit_receipt['vat'] = $item['vat'];
+            $edit_receipt['id_partner'] = $item['id_partner'];
+            $edit_receipt['num_doc'] = $item['num_doc'];
+            $edit_receipt['date_doc'] = $item['date_doc'];
+            $edit_receipt['note'] = $item['note'];
             $edit_receipt['num_pay'] = dateYear($pay_receipt['number'], $pay_receipt['date']);
-            $edit_receipt['date_pay'] = $value['date_pay'];
+            $edit_receipt['pay_id'] = $payment_id;
+            $edit_receipt['date_pay'] = $item['date_pay'];
             $receipt = new Receipt();
             $receipt->load($edit_receipt);
             $receipt->edit('receipt', $edit_receipt['id']);
         }
         unset($_SESSION['form_data']);
-        redirect("/partner/{$pay_receipt['inn']}");
-    }
-
-    /**
-     * Функция возвращающая массив полных данных по приходам
-     * @param $receipt array Строка составных номеров приходов оплаченных данно ЗО
-     * @return array Полные данные о приходах
-     */
-    public function getReceipts($receipt) {
-        $receipts = []; // объявляем массив
-        // проходимся по всем элементам массива
-        foreach ($receipt as &$value) {
-            $num_receipt = explode('/', $value); // получаем составной номер прихода
-            $number = $num_receipt[0]; // выделяем номер
-            $year = $num_receipt[1];   // выделяем год
-            // получаем полные данные о приходе
-            $receipt_full = \R::findOne('receipt', "number = ? AND YEAR(date) = {$year}", [$number]);
-            $receipts[] = $receipt_full;
-        }
-        return $receipts;
+        redirect("/partner/{$pay_receipt['id_partner']}");
     }
 
 }

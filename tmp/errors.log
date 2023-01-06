@@ -126,3 +126,29 @@
 --------------------
 [2022-08-20 08:33:59] Текст ошибки: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'workplace.budget_item' doesn't exist | Файл: E:\OpenServer\domains\workplace.loc\vendor\gabordemooij\redbean\RedBeanPHP\Driver\RPDO.php | Строка: 202
 --------------------
+[2022-08-25 17:31:39] Текст ошибки: Страница не найдена | Файл: E:\OpenServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-08-28 13:16:24] Текст ошибки: Страница не найдена | Файл: E:\OpenServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-09-01 19:10:00] Текст ошибки: Страница не найдена | Файл: E:\OpenServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-09-01 19:11:23] Текст ошибки: Страница не найдена | Файл: E:\OpenServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-09-01 19:11:32] Текст ошибки: Страница не найдена | Файл: E:\OpenServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-09-03 16:32:55] Текст ошибки: Страница не найдена | Файл: E:\OpenServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-09-03 16:35:10] Текст ошибки: Страница не найдена | Файл: E:\OpenServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-10-06 17:21:03] Текст ошибки: Страница не найдена | Файл: E:\OpenServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-11-12 13:52:03] Текст ошибки: Страница не найдена | Файл: E:\OpenServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-12-25 09:29:54] Текст ошибки: Страница не найдена | Файл: E:\OpenServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2022-12-31 15:54:53] Текст ошибки: Страница не найдена | Файл: E:\OpenServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2023-01-04 18:02:22] Текст ошибки: Страница не найдена | Файл: E:\OpenServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------
+[2023-01-06 11:48:05] Текст ошибки: Страница не найдена | Файл: E:\OpenServer\domains\workplace.loc\vendor\workplace\core\Router.php | Строка: 49
+--------------------

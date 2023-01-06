@@ -3,26 +3,28 @@
 namespace app\controllers;
 
 use app\models\Partner;
+use app\models\Payment;
 use app\models\Receipt;
 
 class MainController extends AppController {
 
     public function indexAction() {
-        // получение ассоциативный массив не оплаченных приходов из БД
-        $receipts = \R::getAssocRow("SELECT * FROM receipt WHERE (date_pay is NULL) OR (date_pay = CURDATE())");
+        // массив не оплаченных приходов из БД
+        $receipt_model = new Receipt(); // для приходов
+        $receipts = $receipt_model->getReceiptMain();
         // Получаем дополнительную информацию для каждого прихода
         foreach ($receipts as $k => $v) {
             // Получаем всю информацию о КА
             $partners = new Partner();
-            $partner = $partners->getPartnerByID($v['id_partner']);
+            $partner = $partners->getPartner($v['id_partner']);
             if ($partner) {
                 // если КА существует дописываем ИНН и наименование КА
-                $receipts[$k]['inn'] = $partner['inn'];
+                $receipts[$k]['partner_id'] = $partner['id'];
                 $receipts[$k]['partner'] = $partner['name'];
                 // дата планируемой оплаты
-                $receipts[$k]['pay_date'] = $this->getDatePayment(dateYear($v['number'], $v['date']));
+                $receipts[$k]['pay_date'] = $this->getDatePayment($v['id']);
                 // задержка
-                $receipts[$k]['delay'] = isset($partner['delay']) ? $partner['delay'] : null;
+                $receipts[$k]['delay'] = $partner['delay'] ?? null;
             }
         }
         // формируем метатеги для страницы
@@ -32,54 +34,19 @@ class MainController extends AppController {
     }
 
     /**
-     * Функция обработки нажатия кнопки Ввод оплаты
-     * @return void
-     */
-    public function payAction() {
-        // получаем переданный идентификатор прихода
-        $id = !empty($_GET['id']) ? (int)$_GET['id'] : null;
-        if ($this->isAjax()) {
-            // Если запрос пришел АЯКСом
-            $this->loadView('pay_add_date', compact('id'));
-        }
-        redirect();
-    }
-
-    /**
-     * Функция занесения в БД данных об оплате прихода
-     * @return void
-     */
-    public function payEnterAction() {
-        // получаем данные пришедшие методом POST
-        $data = !empty($_POST) ? $_POST : null;
-        $id_receipt = $data['id'];
-        // получаем приход в который необходимо внести дату оплаты
-        $edit_receipt = \R::findOne('receipt', 'id = ?', [$id_receipt]);
-        $edit_receipt['date_pay'] = $data['date']; // заносим оплату
-        // записываем исправленные данные в БД
-        $receipt = new Receipt();
-        /** @var array $edit_receipt */
-        $receipt->load($edit_receipt);
-        $receipt->edit('receipt', $id_receipt);
-        redirect();
-    }
-
-    /**
      * Функция получения данных об оплате конкретного прихода
-     * @param $num_receipt mixed номер прихода в виде 0000000000/2022 или массив номеров
+     * @param $payment_id string идентификатор прихода
      * @return mixed
      */
-    public function getDatePayment($num_receipt) {
-        $date_payment = null;
-        // получаем данные об оплатах данного прихода
-        $receipts = \R::getAll("SELECT * FROM payment WHERE receipt LIKE ?", ['%'.$num_receipt.'%']);
-        foreach ($receipts as $receipt) { 
-            if (!is_null($date_payment)) {
-                if ($receipt['date_pay'] > $date_payment) {
-                    $date_payment = $receipt['date_pay'];
-                }
-            } else {
-                $date_payment = $receipt['date_pay'];
+    public function getDatePayment(string $payment_id) {
+        $date_payment = '';
+        // получаем данные об оплате данного прихода
+        $payment_model = new Payment(); // для оплат
+        $payments = $payment_model->getPaymentAll();
+        foreach ($payments as $payment) {
+            if (in_array($payment_id, explode(';', $payment['receipts_id']))) {
+                // найдена оплата
+                $date_payment = $payment['date_pay'];
             }
         }
         return $date_payment;
