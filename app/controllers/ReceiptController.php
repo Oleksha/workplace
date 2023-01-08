@@ -214,7 +214,7 @@ class ReceiptController extends AppController {
      */
     protected function checkPay(array $data): bool
     {
-        //debug($data);die;
+        debug($data);
         $verify = true; // по умолчанию ошибок нет
         if (!$this->checkNumBO($data['num_bo'])) {
             $_SESSION['error_payment'][] = 'Ошибка заполнения поля НОМЕР БО';
@@ -226,9 +226,9 @@ class ReceiptController extends AppController {
             $_SESSION['error_payment'][] = "Не совпадает количество выбранных приходов ({$y}) и сумм ({$x})";
             $verify =  false;
         }
-        if (count($data['num_er']) != count(explode(';', $data['sum_er']))) {
+        if (count($data['num_er']) != count(explode(';', $data['sum_er'][0]))) {
             $y = count($data['num_er']);
-            $x = count(explode(';', $data['sum_er']));
+            $x = count(explode(';', $data['sum_er'][0]));
             $_SESSION['error_payment'][] = "Не совпадает количество выбранных ЕР ({$y}) и введенных сумм ({$x})";
             $verify =  false;
         }
@@ -237,9 +237,9 @@ class ReceiptController extends AppController {
             $x = count(explode(';', $data['sum_bo']));
             $_SESSION['error_payment'][] = "Не совпадает количество введенных БО ({$y}) и введенных сумм ({$x})";
             $verify =  false;
-        }/*
+        }
         $a = array_sum($data['sum']);
-        $b = array_sum(explode(';', $data['sum_er']));
+        $b = array_sum(explode(';', $data['sum_er'][0]));
         $epsilon = 0.00001;
         if (abs($a - $b) < $epsilon) {
             //echo "true";
@@ -253,21 +253,24 @@ class ReceiptController extends AppController {
         } else {
             $_SESSION['error_payment'][] = "Не совпадает сумма выбранных приходов {$a} и суммы БО {$b}";
             $verify =  false;
-        }
-        if (count(explode(';', $data['sum_er'])) == count($data['num_er'])) {
-            $er_obj = new Er();
+        }/*
+        if (count(explode(';', $data['sum_er'][0])) == count($data['num_er'])) {
+            // создаем необходимые объекты связи с БД
+            $er_models = new Er();           // Единоличные решения
             $ers = $data['num_er'];
-            $sums = explode(';', $data['sum_er']);
+            $sums = explode(';', $data['sum_er'][0]);
             foreach ($ers as $k => $v) {
-                $sum = $sums[$k];
-                $sum = round($sum / $data['vat'], 2);
+                $sum = $sums[$k]; // получаем сумму списываемую с ЕР
+                $sum = round($sum / $data['vat'], 2); // используется сумма без НДС
                 // получаем текущие данные
-                $current['number'] = $data['number'] . '/' . substr($data['date'], 0, 4);
-                $current['summa'] = $sum;
+                //$current['number'] = $data['number'] . '/' . substr($data['date'], 0, 4);
+                //$current['summa'] = $sum;
                 // получаем остаток средств на ЕР
-                $coast = $er_obj->getBalance($v, $data['id_partner']);
-                //$pays_arr = $er_obj->getPaymentCoast($v);
-                //$er = $er_obj->getEr($v);
+                $data_er = $er_models->getEr($v);
+                $coast = $data_er['summa'] - $er_models->getERCosts($v);
+                debug($v);debug($coast);
+                //$pays_arr = $er_models->getPaymentCoast($v);
+                //$er = $er_models->getEr($v);
                 //$summa = $er['summa'];
                 //$total = 0.00;
                 //foreach ($pays_arr as $item) {
@@ -289,6 +292,7 @@ class ReceiptController extends AppController {
             $_SESSION['error_payment'][] = "Не совпадает сумма количество введеных ЕР {$a} и количество сумм ЕР {$b}";
             $verify =  false;
         }
+        die;
         if (count(explode(';', $data['sum_bo'])) == count(explode(';', $data['num_bo']))) {
             $bo_obj = new Budget();
             $bos = explode(';', $data['num_bo']);

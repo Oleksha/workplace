@@ -108,13 +108,13 @@
         $('#main_index').dataTable( {
             "order": [[ 3, "asc" ]],
             "createdRow": function ( row, data, index ) {
-                if ( data[4] == "Подано на оплату" ) {
+                if ( data[4] === "Подано на оплату" ) {
                     $('td', row).eq(3).addClass('table-warning');
                 }
-                if ( data[4] == "Приход не обработан" ) {
+                if ( data[4] === "Приход не обработан" ) {
                     $('td', row).eq(3).addClass('table-danger');
                 }
-                if ( data[4] == "Оплачено" ) {
+                if ( data[4] === "Оплачено" ) {
                     $('td', row).eq(3).addClass('table-success');
                 }
             },

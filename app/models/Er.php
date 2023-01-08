@@ -134,12 +134,13 @@ class Er extends AppModel {
      * @param $num_er string номер ЕР
      * @return array
      */
-    /*public function getPaymentCoast(string $num_er): array {
-        $pay_obj = new Payment();       // объект ЗО
+    public function getPaymentCoast(string $num_er): array {
+        // создаем необходимые объекты связи с БД
+        $payment_model = new Payment();       // объект ЗО
         $er = $this->getEr($num_er);    // получаем информацию по ЕР
         $pay = [];                      // массив содержащий возвращаемые данные
         // получаем все оплаты использующие эту ЕР
-        $payments = $pay_obj->getPayment($num_er);
+        $payments = $payment_model->getPayment($num_er);
         // Если оплаты есть проходимся по всему массиву
         if ($payments) {
             foreach ($payments as $payment) {
@@ -156,7 +157,7 @@ class Er extends AppModel {
             }
         }
         return $pay;
-    }*/
+    }
 
     /**
      * Возвращает информацию по ЕР
