@@ -116,7 +116,7 @@ class PartnerController extends AppController {
                     //$_SESSION['success'] = 'Контрагент сохранен в БД';
                     unset($_SESSION['form_data']);
                     // перезагрузим страницу
-                    redirect("/partner/" . $data['id']);
+                    redirect("/partner/" . $id);
                 } else {
                     $_SESSION['errors'] = 'Возникли ошибки при сохранении данных в БД';
                 }
