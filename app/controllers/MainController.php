@@ -32,6 +32,39 @@ class MainController extends AppController {
         // Передаем полученные данные в вид
         $this->set(compact('receipts'));
     }
+    
+    /**
+     * Функция обработки нажатия кнопки Ввод оплаты
+     * @return void
+     */
+    public function payAction() {
+        // получаем переданный идентификатор прихода
+        $id = !empty($_GET['id']) ? (int)$_GET['id'] : null;
+        if ($this->isAjax()) {
+            // Если запрос пришел АЯКСом
+            $this->loadView('pay_add_date', compact('id'));
+        }
+        redirect();
+    }
+
+    /**
+     * Функция занесения в БД данных об оплате прихода
+     * @return void
+     */
+    public function payEnterAction() {
+        // получаем данные пришедшие методом POST
+        $data = !empty($_POST) ? $_POST : null;
+        $id_receipt = $data['id'];
+        // получаем приход в который необходимо внести дату оплаты
+        $edit_receipt = \R::findOne('receipt', 'id = ?', [$id_receipt]);
+        $edit_receipt['date_pay'] = $data['date']; // заносим оплату
+        // записываем исправленные данные в БД
+        $receipt = new Receipt();
+        /** @var array $edit_receipt */
+        $receipt->load($edit_receipt);
+        $receipt->edit('receipt', $id_receipt);
+        redirect();
+    }
 
     /**
      * Функция получения данных об оплате конкретного прихода
