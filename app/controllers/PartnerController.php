@@ -90,6 +90,43 @@ class PartnerController extends AppController {
         }
         return $ers;
     }
+    
+    public function addAction() {
+        unset($_SESSION['form_data']); // Очищаем сессию данных о КА
+        // если существуют переданные данные методом POST
+        if (!empty($_POST)) {
+            // создаем объект класса-модели User
+            $user = new Partner();
+            // запоминаем переданные данные
+            $data = $_POST;
+            // загружаем переданные данные
+            $user->load($data);
+            // проверяем заполненные данные
+            if (!$user->checkUnique()) {
+                // если проверка не пройдена запишем ошибки в сессию
+                $user->getErrors();
+                // запоминаем уже введенные данные
+                $_SESSION['form_data'] = $data;
+            } else {
+                $user->attributes['delay'] = (int)$user->attributes['delay'];
+                $user->attributes['vat'] = (double)$user->attributes['vat'];
+                // если проверка пройдена записываем данные в таблицу
+                if ($id = $user->save('partner')) {
+                    // если все прошло хорошо в ID номер зарегистрированного пользователя
+                    //$_SESSION['success'] = 'Контрагент сохранен в БД';
+                    unset($_SESSION['form_data']);
+                    // перезагрузим страницу
+                    redirect("/partner/" . $data['id']);
+                } else {
+                    $_SESSION['errors'] = 'Возникли ошибки при сохранении данных в БД';
+                }
+            }
+
+        }
+        // устанавливаем метаданные
+        $this->setMeta('Добавление нового контрагента');
+
+    }
 
     /**
      * Изменяет данные о КА
