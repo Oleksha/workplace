@@ -52,11 +52,14 @@ class MainController extends AppController {
      * @return void
      */
     public function payEnterAction() {
+        // создаем объекты для работы с БД
+        $receipt_model = new Receipt(); // для приходов
         // получаем данные пришедшие методом POST
         $data = !empty($_POST) ? $_POST : null;
         $id_receipt = $data['id'];
         // получаем приход в который необходимо внести дату оплаты
-        $edit_receipt = \R::findOne('receipt', 'id = ?', [$id_receipt]);
+        $edit_receipt = $receipt_model->getReceipt('id', $id_receipt);
+        $edit_receipt = $edit_receipt[0];
         $edit_receipt['date_pay'] = $data['date']; // заносим оплату
         // записываем исправленные данные в БД
         $receipt = new Receipt();
