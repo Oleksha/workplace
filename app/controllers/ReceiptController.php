@@ -214,7 +214,7 @@ class ReceiptController extends AppController {
      */
     protected function checkPay(array $data): bool
     {
-        debug($data);
+        //debug($data);
         $verify = true; // по умолчанию ошибок нет
         if (!$this->checkNumBO($data['num_bo'])) {
             $_SESSION['error_payment'][] = 'Ошибка заполнения поля НОМЕР БО';
