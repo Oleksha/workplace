@@ -66,8 +66,10 @@ class PartnerController extends AppController {
         }
         // ПРИХОДЫ
         $receipt = $receipt_models->getReceipt('id_partner', $id);
-        foreach ($receipt as $k => $v) {
-            $receipt[$k]['type'] = $receipt_models->isTypeReceipt($v['id']);
+        if ($receipt) {
+            foreach ($receipt as $k => $v) {
+                $receipt[$k]['type'] = $receipt_models->isTypeReceipt($v['id']);
+            }
         }
         // формируем метатеги для страницы
         $this->setMeta($partner['name'],'Наименование КА', 'Описание...', 'Ключевые слова...');
