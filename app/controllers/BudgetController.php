@@ -109,7 +109,7 @@ class BudgetController extends AppController {
                     $pay['summa'] = round($sums[$key] / 1.2, 2);
                 }
             }
-            $pay['partner'] = $partner_obj->getPartnerByID($payment['id_partner']);
+            $pay['partner'] = $partner_obj->getPartner($payment['id_partner']);
             $pay_arr[] = $pay;
         }
         return $pay_arr;
