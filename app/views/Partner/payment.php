@@ -211,6 +211,7 @@
                             <input type="hidden" name="id_partner" value="<?=$partner['id'] ?? '';?>">
                             <input type="hidden" name="id" value="<?=$payment['id'] ?? '';?>">
                             <input type="hidden" name="inn" value="<?=$partner['inn'] ?? '';?>">
+                            <input type="hidden" name="type" value="<?=$type ?? '';?>">
                             <div class="form-group text-center">
                                 <?php if ($type == 1) :?>
                                     <button type="button" class="btn btn-primary mt-3" onclick="history.back();">Закрыть</button>
