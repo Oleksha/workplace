@@ -253,7 +253,9 @@ class ReceiptController extends AppController {
         } else {
             $_SESSION['error_payment'][] = "Не совпадает сумма выбранных приходов {$a} и суммы БО {$b}";
             $verify =  false;
-        }/*
+        }
+        //die;
+        ///*
         if (count(explode(';', $data['sum_er'][0])) == count($data['num_er'])) {
             // создаем необходимые объекты связи с БД
             $er_models = new Er();           // Единоличные решения
@@ -267,8 +269,18 @@ class ReceiptController extends AppController {
                 //$current['summa'] = $sum;
                 // получаем остаток средств на ЕР
                 $data_er = $er_models->getEr($v);
-                $coast = $data_er['summa'] - $er_models->getERCosts($v);
-                debug($v);debug($coast);
+                if ($data['type'] == 3) { 
+                    $coast = $data_er['summa'] - $er_models->getERCosts($v);
+                } elseif ($data['type'] == 2) {
+                    // убрать из остатка сумму текущей оплаты
+                    $coast = $data_er['summa'] - $er_models->getERCosts($v) + $sum;
+                } else {
+                    $coast = 0.00;
+                    $_SESSION['error_payment'][] = "Ошибка заполнения данных";
+                    $verify =  false;
+                }
+                //$coast = $data_er['summa'] - $er_models->getERCosts($v);
+                //debug($v);debug($coast);
                 //$pays_arr = $er_models->getPaymentCoast($v);
                 //$er = $er_models->getEr($v);
                 //$summa = $er['summa'];
@@ -292,7 +304,7 @@ class ReceiptController extends AppController {
             $_SESSION['error_payment'][] = "Не совпадает сумма количество введеных ЕР {$a} и количество сумм ЕР {$b}";
             $verify =  false;
         }
-        die;
+        /*die;
         if (count(explode(';', $data['sum_bo'])) == count(explode(';', $data['num_bo']))) {
             $bo_obj = new Budget();
             $bos = explode(';', $data['num_bo']);
